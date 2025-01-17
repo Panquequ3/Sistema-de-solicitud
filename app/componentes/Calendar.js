@@ -27,17 +27,18 @@ const Calendario = () => {
       initialView: 'dayGridMonth',
       events: events,
       locale: 'es',
-      dateClick: (info) => {
+      dateClick: function(info) {
         setFechaSeleccionada(info.dateStr);
         setModalAbierto(true); // Abrir el modal al seleccionar una fecha
+      },
+      eventClick: function(info) {
+        setFechaSeleccionada(info.event.startStr);
+        setModalAbierto(true); // Abrir el modal al seleccionar un evento
       },
     });
     calendar.render();
   }, []);
 
-  const handleClose = () => {
-    setModalAbierto(false);
-  };
 
   return (
     <div>

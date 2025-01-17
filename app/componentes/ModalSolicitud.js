@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from 'react';
+import HacerSolicitud from "./HacerSolicitud";
 // Componente modal (pop up) que despliega la lista de solicitudes
 // y un boton que redirigue a la posibilidad de hacer una solicitud
 
@@ -10,6 +12,7 @@ const ModalSolicitud = ({
     events,
 }) => {
 
+  const [solicitudAbierto, setSolicitudAbierto] = useState(false);
   // Si hay eventos, los filtramos
   const eventos = events.length > 0 ? 
                   events.filter(event => event.start === fechaSeleccionada) :
@@ -26,6 +29,11 @@ const ModalSolicitud = ({
       handleClose();
     }
   };
+  const handleApplication = () => {
+    setModalAbierto(false);
+    setSolicitudAbierto(true);
+  };
+
 
   return (
     <div>
@@ -34,7 +42,7 @@ const ModalSolicitud = ({
           <div className="modal-content">
             <div className="modal-header">
               <h2 className="header-title">¿Desea hacer una solicitud? </h2>
-              <button className="application-button"> Hacer una solicitud </button>
+              <button className="application-button" onClick={handleApplication} > Hacer una solicitud </button>
             </div>
                 <h4 className="subtitle">Reservas del estudio para el día {fechaSeleccionada}</h4>
                 <ul>
@@ -52,6 +60,12 @@ const ModalSolicitud = ({
             </button>
           </div>
         </div>
+      )}
+      {solicitudAbierto && (
+        <HacerSolicitud
+          solicitudAbierto={solicitudAbierto}
+          setSolicitudAbierto={setSolicitudAbierto}
+        />
       )}
     </div>
   );

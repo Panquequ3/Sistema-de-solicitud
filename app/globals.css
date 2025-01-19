@@ -1,3 +1,10 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
 /* Ajustes del calendario principal */
 
 /* Para cambiar el color de la barra superior al calendario */
@@ -22,21 +29,20 @@
   cursor: pointer; 
 }
 
-/* Permite oscurecer el fondo cuando se pasa el cursor por encima */
+/* Permite oscurecer el fondo cuando se pasa el cursor por encima de un dia del calendario*/
 .fc-daygrid-day:hover {
   background-color: rgba(0, 145, 255, 0.1); 
 }
 
 .titulo {
-  font-size: 30px; /* Tamaño de fuente */
-  font-weight: bold; /* Peso de la fuente */
-  color: #05a3a3; /* Color del texto */
-  text-align: center; /* Alineación del texto */
-  margin-top: 20px; /* Margen superior */
-  margin-bottom: 20px; /* Margen inferior */
-  padding: 10px; /* Relleno */
-  background-color: #ffffff; /* Color de fondo */
-  border-radius: 5px; /* Bordes redondeados */
+  font-size: 30px; 
+  font-weight: bold; 
+  color: #05a3a3; 
+  text-align: center; 
+  margin-top: 20px; 
+  margin-bottom: 20px; 
+  padding: 10px;
+  border-radius: 5px; 
 }
 
 .calendario {
@@ -50,34 +56,15 @@
 }
 
 .ventana {
-  width: 100%; /* Ancho del contenedor del calendario */
-  max-width: 800px; /* Ancho máximo del contenedor del calendario */
-  margin: 0 auto; /* Centra el calendario horizontalmente */
-  height: 800px; /* Altura del contenedor del calendario */
-  max-height: 800px; /* Altura máxima del contenedor del calendario */
-  border-radius: 10px; /* Bordes redondeados */
+  width: 100%; 
+  max-width: 800px; 
+  margin: 0 auto; 
+  height: 800px; 
+  max-height: 800px;
+  border-radius: 10px;
   background-color: #f1f9ff; 
 }
 
-
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-.titulo {
-  font-size: 30px; /* Tamaño de fuente */
-  font-weight: bold; /* Peso de la fuente */
-  color: #05a3a3; /* Color del texto */
-  text-align: center; /* Alineación del texto */
-  margin-top: 20px; /* Margen superior */
-  margin-bottom: 20px; /* Margen inferior */
-  padding: 10px; /* Relleno */
-  background-color: #ffffff; /* Color de fondo */
-  border-radius: 5px; /* Bordes redondeados */
-}
 
 .calendario {
   width: 100%; /* Ancho del contenedor del calendario */
@@ -85,7 +72,7 @@ body {
   margin: 0 auto; /* Centra el calendario horizontalmente */
   height: 600px; /* Altura del contenedor del calendario */
   max-height: 800px; /* Altura máxima del contenedor del calendario */
-  border-radius: 10px; /* Bordes redondeados */
+  border-radius: 10px;
   background-color: #f1f9ff;
 }
 
@@ -94,13 +81,13 @@ body {
 .modal-overlay {
   position: fixed; /* Fija el elemento en la ventana, se posiciona en relación con la ventana */
   top: 0; /* establece posición superior del elemento en 0 pixeles desde la parte superior */
-  left: 0; /* lo mismo pero la posición izquierda */
-  right: 0; /* lo mismo pero la posición derecha */
-  bottom: 0; /* lo mismo pero la posición inferior */
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
   display: flex; /* Permite alinear y distribuir el espacio entre los elementos hijos */
   justify-content: center; /* centra los elementos hijos horizontalmente dentro del contenedor flex */
   align-items: center; /* centra los elementos hijos verticalmente dentro del contenedor flex */
-  background-color: rgba(23, 38, 70, 0.5); /* Color gris oscuro con opacidad del 50% */
+  background-color: rgba(23, 38, 70, 0.5);
   z-index: 50; /* establece el nivel de apilamiento del elemento */
 }
 
@@ -122,15 +109,6 @@ body {
   }
   100% {
     transform: scale(1);
-  }
-}
-
-@keyframes pull-back {
-  0% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(0);
   }
 }
 
@@ -172,6 +150,9 @@ body {
 .subtitle {
   color: #05a3a3;  
 }
+
+/* Modal de hacer solicitud */
+
 .application {
   font-size: 15px; /* Tamaño de fuente */
   font-weight: bold; /* Peso de la fuente */
@@ -190,8 +171,8 @@ body {
   position: fixed; /* Fija el elemento en la ventana, se posiciona en relación con la ventana */
   top: 0; /* establece posición superior del elemento en 0 pixeles desde la parte superior */
   left: 0; /* lo mismo pero la posición izquierda */
-  right: 0; /* lo mismo pero la posición derecha */
-  bottom: 0; /* lo mismo pero la posición inferior */
+  width: 100%;
+  height: 100%;
   display: flex; /* Permite alinear y distribuir el espacio entre los elementos hijos */
   justify-content: center; /* centra los elementos hijos horizontalmente dentro del contenedor flex */
   align-items: center; /* centra los elementos hijos verticalmente dentro del contenedor flex */
@@ -200,6 +181,12 @@ body {
 }
 
 .application-content {
+  width: 80%; /* Ancho fijo */
+  max-width: 600px; /* Ancho máximo */
+  height: 80%; /* Alto fijo */
+  max-height: 600px; /* Alto máximo */
+  overflow-y: auto; /* Habilitar desplazamiento vertical */
+  padding: 1rem;
   background-color: #f1f9ff;
   padding: 1.5rem;
   border-radius: 0.5rem;
@@ -208,17 +195,11 @@ body {
   animation: pop-up 0.4s;
 }
 
-/* Modal de hacer solicitud */
-.date {
+.divider-style {
   color: #05a3a3;
-}
-
-.time {
-  color: #05a3a3;  
-}
-
-.information {
-  color: #05a3a3;
+  font-weight: bold; /* Peso de la fuente */
+  font-size: 18px; /* Tamaño de la fuente */
+  text-align: left; /* Alineación del texto */
 }
 
 /* Botón de enviar solicitud */
@@ -231,4 +212,108 @@ body {
   border-radius: 0.25rem;
   border: none;
   cursor: pointer;
+}
+
+.datePicker {
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: none;
+}
+.timePicker {
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: none; 
+}
+
+.time {
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  gap: 2rem
+}
+
+.headerApplication {
+  color: #091818;
+  font-weight: bold; /* Peso de la fuente */
+  font-size: 20px; /* Tamaño de la fuente */
+  text-align: center; /* Alineación del texto */
+}
+
+.textField {
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: none; 
+}
+
+.listApplication {
+  font-size: 15px; /* Tamaño de fuente */
+  font-weight: bold; /* Peso de la fuente */
+  color: #1f2626; /* Color del texto */
+  text-align: left; /* Alineación del texto */
+  align-items: left;
+  margin-top: 20px; /* Margen superior */
+  margin-bottom: 20px; /* Margen inferior */
+  margin-left: 10px; /* Margen izquierdo */
+  padding: 10px; /* Relleno */
+  background-color: #ffffff; /* Color de fondo */
+  border-radius: 10px; /* Bordes redondeados */
+  border: 1px solid #05a3a3;
+}
+
+.application-table {
+  padding: 20px;
+}
+
+.accept-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #05a3a3;
+  color: #ffffff;
+  font-size: 14px;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+.deny-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #ff9442;
+  color: #ffffff;
+  font-size: 14px;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+.table-cell-hover:hover {
+  background-color: rgba(131, 159, 180, 0.1); 
+}
+
+.table-header th {
+  color: #165e5e;
+  background-color: #fafcff;
+}
+
+/* Modal que muestra la descripción de una solicitud */
+.descrip-overlay {
+  position: fixed; /* Fija el elemento en la ventana, se posiciona en relación con la ventana */
+  top: 0; /* establece posición superior del elemento en 0 pixeles desde la parte superior */
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  display: flex; /* Permite alinear y distribuir el espacio entre los elementos hijos */
+  justify-content: center; /* centra los elementos hijos horizontalmente dentro del contenedor flex */
+  align-items: center; /* centra los elementos hijos verticalmente dentro del contenedor flex */
+  background-color: rgba(23, 38, 70, 0.5);
+  z-index: 50; /* establece el nivel de apilamiento del elemento */
+}
+
+.descrip-content {
+  background-color: #f1f9ff;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 60;
+  animation: pop-up 0.4s;
 }

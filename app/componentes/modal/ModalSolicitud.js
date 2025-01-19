@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import HacerSolicitud from "./HacerSolicitud";
+
 // Componente modal (pop up) que despliega la lista de solicitudes
-// y un boton que redirigue a la posibilidad de hacer una solicitud
+// y un boton que dirigue a la posibilidad de hacer una solicitud
 
 const ModalSolicitud = ({
     modalAbierto,
@@ -52,7 +53,7 @@ const ModalSolicitud = ({
                     <div className="application" key={index}>{event.title} - {event.time}</div>
                   )) 
                 ) : (
-                  <li>No hay eventos para esta fecha.</li>
+                  <li>No hay reservas para esta fecha.</li>
                 )}
                 </ul>
             <button onClick={handleClose} className="close-button">

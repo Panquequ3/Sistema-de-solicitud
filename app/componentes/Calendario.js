@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import ModalSolicitud from './ModalSolicitud';
+import ModalSolicitud from './modal/ModalSolicitud';
+
+// Componente que renderiza el calendario con las reservas del estudio
 
 const Calendario = () => {
   const calendarRef = useRef(null);

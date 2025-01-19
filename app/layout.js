@@ -1,6 +1,5 @@
 import "./globals.css";
 // import { Provider } from './providers/provider';
-import '@mantine/dates/styles.css';
 
 export const metadata = {
   title: "Sistema de solicitud",

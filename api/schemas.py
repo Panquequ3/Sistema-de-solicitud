@@ -44,6 +44,19 @@ class SolicitudResponse(SolicitudBase):
     class Config:
         from_attributes = True
 
+# Nueva clase para la respuesta de solicitudes con información del estudiante
+class SolicitudEstudianteResponse(BaseModel):
+    id_solicitud: int
+    fecha: date
+    hora_inicio: time
+    hora_fin: time
+    id_estado: int
+    id_estudiante: int
+    nombre_estudiante: str
+    email: str
+
+    class Config:
+        orm_mode = True
 
 # Esquema justificaciones (al denegar una solicitud) #
 

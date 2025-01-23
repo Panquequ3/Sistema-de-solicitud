@@ -5,7 +5,7 @@ import models # Donde están las tablas de la base de datos
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session, joinedload
 from schemas import ( EstudianteBase, EstudianteCreate, EstudianteResponse,
-    SolicitudBase, SolicitudCreate, SolicitudUpdate, SolicitudResponse,
+    SolicitudBase, SolicitudCreate, SolicitudUpdate, SolicitudResponse, SolicitudEstudianteResponse,
     JustificacionBase, JustificacionCreate, JustificacionResponse,
     EtapaBase, EtapaCreate, EtapaResponse )
 from fastapi.middleware.cors import CORSMiddleware
@@ -38,21 +38,7 @@ app.add_middleware(
 def index():
     return "hola mundo"
 
-# @app.get("/items/{item_id}")  # Ruta GET con un parámetro de ruta
-# def read_item(item_id: int, q: str = None):
-#     return {"item_id": item_id, "q": q}
 
-# @app.post("/items/")  # Ruta POST para crear un nuevo ítem
-# def create_item(item: dict):
-#     return {"item": item}
-
-# @app.put("/items/{item_id}")  # Ruta PUT para actualizar un ítem existente
-# def update_item(item_id: int, item: dict):
-#     return {"item_id": item_id, "item": item}
-
-# @app.delete("/items/{item_id}")  # Ruta DELETE para eliminar un ítem
-# def delete_item(item_id: int):
-#     return {"message": f"Item {item_id} eliminado"}
 
 """ SOLICITUDES """
 
@@ -78,6 +64,26 @@ def muestra_solicitud(solicitud_id: int, db: Session = Depends(get_db)):
 def obtener_solicitudes(db: Session = Depends(get_db)):
     return db.query(models.Solicitud).all()
 
+# Ruta GET para obtener todas las solicitudes con información del estudiante
+@app.get("/solicitudesEstudiantes/", response_model=List[SolicitudEstudianteResponse])
+def obtener_solicitudes_con_estudiantes(db: Session = Depends(get_db)):
+    solicitudes = db.query(models.Solicitud).all()
+    solicitudes_con_estudiantes = []
+    for solicitud in solicitudes:
+        estudiante = db.query(models.Estudiante).filter(models.Estudiante.id_estudiante == solicitud.id_estudiante).first()
+        if estudiante:
+            solicitud_data = {
+                "id_solicitud": solicitud.id_solicitud,
+                "fecha": solicitud.fecha,
+                "hora_inicio": solicitud.hora_inicio,
+                "hora_fin": solicitud.hora_fin,
+                "id_estado": solicitud.id_estado,
+                "id_estudiante": solicitud.id_estudiante,
+                "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
+                "email": estudiante.email
+            }
+            solicitudes_con_estudiantes.append(solicitud_data)
+    return solicitudes_con_estudiantes
 
 # Ruta PUT para actualizar una solicitud existente
 @app.put("/solicitudes/{solicitud_id}", response_model=SolicitudResponse)
@@ -89,6 +95,8 @@ def update_solicitud(solicitud_id: int, solicitud: SolicitudUpdate, db: Session 
     db.commit()
     db.refresh(db_solicitud)
     return db_solicitud
+
+
 
 """ ESTUDIANTE """
 # Rutas para los estudiantes

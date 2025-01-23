@@ -5,7 +5,7 @@ import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import ModalSolicitud from './pop-up/ModalSolicitud';
-import { format } from 'date-fns';
+
 
 // Componente que renderiza el calendario con las reservas del estudio
 
@@ -15,38 +15,22 @@ const Calendario = () => {
   const [modalAbierto, setModalAbierto] = useState(false);
   const [eventos, setEventos] = useState([]);
 
-  const obtenerEstudiante = async (id_estudiante) => {
-    try {
-      const response = await fetch(`http://localhost:8000/estudiante/${id_estudiante}`);
-      if (!response.ok) {
-        throw new Error('Fallo al encontrar al estudiante');
-      }
-      const data = await response.json();
-      return `${data.nombre} ${data.apellido}`;
-    } catch (error) {
-        console.error("Error:", error);
-        return null;
-    }
-  };
 
-  // Función para obtener todas las solicitudes desde la API
   const obtenerSolicitudes = async () => {
     try {
-      const response = await fetch('http://localhost:8000/solicitudes/');
+      const response = await fetch('http://localhost:8000/solicitudesEstudiantes/');
       if (!response.ok) {
         throw new Error('Fallo al obtener solicitudes');
       }
       const data = await response.json();
       
-      // Utilizamos Promise.all para manejar multiples llamadas asincronas
-      const evento = await Promise.all(data.map(async (solicitud) => {
-        const nombreEstudiante = await obtenerEstudiante(solicitud.id_estudiante);
+      const evento = data.map((solicitud) => {
         return {
-          title: `Solicitud de ${nombreEstudiante}`,
+          title: solicitud.nombre_estudiante,
           start: solicitud.fecha,
           time: `${solicitud.hora_inicio} - ${solicitud.hora_fin}`,
         };
-      }));
+      });
       
       setEventos(evento);
     } catch (error) {

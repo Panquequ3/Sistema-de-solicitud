@@ -20,48 +20,30 @@ const ListarSolicitud = () => {
   const [descripcion, setDescripcion] = useState(null);
   const [eventos, setEventos] = useState([]); // Ejemplos temporales
 
-  const obtenerEstudiante = async (id_estudiante) => {
-    try {
-      const response = await fetch(`http://localhost:8000/estudiante/${id_estudiante}`);
-      if (!response.ok) {
-        throw new Error('Fallo al encontrar al estudiante');
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-        console.error("Error:", error);
-        return null;
-    }
-  };
-
-  // Función para obtener todas las solicitudes desde la API
   const obtenerSolicitudes = async () => {
     try {
-      const response = await fetch('http://localhost:8000/solicitudes/');
+      const response = await fetch('http://localhost:8000/solicitudesEstudiantes/');
       if (!response.ok) {
         throw new Error('Fallo al obtener solicitudes');
       }
       const data = await response.json();
       
-      // Utilizamos Promise.all para manejar multiples llamadas asincronas
-      const evento = await Promise.all(data.map(async (solicitud) => {
-        const estudiante = await obtenerEstudiante(solicitud.id_estudiante);
+      const evento = data.map((solicitud) => {
         return {
-          title: `${estudiante.nombre} ${estudiante.apellido}`,
-          email: estudiante.email,
+          title: solicitud.nombre_estudiante,
+          email: solicitud.email,
           start: solicitud.fecha,
           desc: "falta",
           startTime: solicitud.hora_inicio,
           endTime: solicitud.hora_fin,
         };
-      }));
+      });
       
       setEventos(evento);
     } catch (error) {
       console.error('Error:', error);
     }
   };
-
     useEffect(() => {
       obtenerSolicitudes();
     }, []);

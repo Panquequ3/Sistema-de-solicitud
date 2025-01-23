@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import ModalSolicitud from './modal/ModalSolicitud';
+import ModalSolicitud from './pop-up/ModalSolicitud';
+import { format } from 'date-fns';
 
 // Componente que renderiza el calendario con las reservas del estudio
 
@@ -12,23 +13,61 @@ const Calendario = () => {
   const calendarRef = useRef(null);
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [events, setEvents] = useState([
-    { title: 'Solicitud 1', start: '2025-01-01', time: '14:00' },
-    { title: 'Solicitud 2', start: '2025-01-01', time: '16:00' },
-    { title: 'Solicitud 3', start: '2025-01-01', time: '19:00' },
-    { title: 'Solicitud 8', start: '2025-01-01', time: '8:00' },
-    { title: 'Solicitud 4', start: '2025-01-01', time: '23:00' },
-    { title: 'Solicitud 5', start: '2025-01-05', time: '1:00' },
-    { title: 'Solicitud 6', start: '2025-01-05', time: '14:00' },
-    { title: 'Solicitud 7', start: '2025-01-05', time: '17:30' },
-  ]);
+  const [eventos, setEventos] = useState([]);
+
+  const obtenerEstudiante = async (id_estudiante) => {
+    try {
+      const response = await fetch(`http://localhost:8000/estudiante/${id_estudiante}`);
+      if (!response.ok) {
+        throw new Error('Fallo al encontrar al estudiante');
+      }
+      const data = await response.json();
+      return `${data.nombre} ${data.apellido}`;
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+  };
+
+  // Función para obtener todas las solicitudes desde la API
+  const obtenerSolicitudes = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/solicitudes/');
+      if (!response.ok) {
+        throw new Error('Fallo al obtener solicitudes');
+      }
+      const data = await response.json();
+      
+      // Utilizamos Promise.all para manejar multiples llamadas asincronas
+      const evento = await Promise.all(data.map(async (solicitud) => {
+        const nombreEstudiante = await obtenerEstudiante(solicitud.id_estudiante);
+        return {
+          title: `Solicitud de ${nombreEstudiante}`,
+          start: solicitud.fecha,
+          time: `${solicitud.hora_inicio} - ${solicitud.hora_fin}`,
+        };
+      }));
+      
+      setEventos(evento);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  // useEffect para obtener las solicitudes al montar el componente
+  useEffect(() => {
+    obtenerSolicitudes();
+  }, []);
 
   useEffect(() => {
     const calendar = new Calendar(calendarRef.current, {
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
-      events: events,
+      dayMaxEventRows: true,
+      moreLinkText: 'más', 
+      events: eventos,
       locale: 'es',
+      buttonText: { today: 'Hoy', },
       dateClick: function(info) {
         setFechaSeleccionada(info.dateStr);
         setModalAbierto(true); // Abrir el modal al seleccionar una fecha
@@ -39,7 +78,7 @@ const Calendario = () => {
       },
     });
     calendar.render();
-  }, []);
+  }, [eventos]);
 
 
   return (
@@ -50,7 +89,7 @@ const Calendario = () => {
         modalAbierto={modalAbierto}
         setModalAbierto={setModalAbierto}
         fechaSeleccionada={fechaSeleccionada}
-        events={events}
+        events={eventos}
       />
 
     </div>

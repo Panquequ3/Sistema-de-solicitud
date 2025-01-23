@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 
-// Componente modal (pop up) que despliega la lista de solicitudes
-// y un boton que dirigue a la posibilidad de hacer una solicitud
+// Componente modal (pop up) que despliega la descripcion de la
+// solicitud 
 
 const Descripcion = ({
     modalAbierto,
     setModalAbierto,
-    descripcion
+    contenido
 }) => {
 
 
@@ -29,12 +29,22 @@ const Descripcion = ({
   return (
     <div>
       {modalAbierto && (
-        <div className="descrip-overlay" onClick={handleOverlayClick}>
-          <div className="descrip-content">
-            <p>{descripcion}</p>
-            <button onClick={handleClose} className="close-button">
-              Cerrar
-            </button>
+        <div className="modal-overlay" onClick={handleOverlayClick}>
+          <div className="modal-content">
+            <div style={{ textAlign: 'left', marginBottom: '10px' }}>
+             Descripción
+            </div>
+            <div>
+              <div style={{ background:"white", padding:"10px", 
+                            borderRadius: "10px", textAlign: 'left' }}>
+                {contenido}
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <button onClick={handleClose} className="close-button">
+                  Cerrar
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

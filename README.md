@@ -26,6 +26,7 @@ npm install fullcalendar @fullcalendar/core @fullcalendar/daygrid
 * [MUI](https://mui.com/material-ui/getting-started/installation/)
 ```bash
 npm install @mui/material @emotion/react @emotion/styled
+npm install @mui/icons-material
 ```
 * [Date picker de MUI x (versión gratuita)](https://mui.com/x/react-date-pickers/getting-started/)
 

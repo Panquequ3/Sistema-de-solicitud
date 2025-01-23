@@ -1,28 +1,28 @@
 import "@/app/globals.css";
 import { useState } from "react";
-
+import Justificacion from "./Justificacion";
 // Componente: Botón que permite denegar una solicitud pendiente
 
-const Denegar= () => { 
-
-
-    // Función simulada para enviar la solicitud (TEMPORAL)
-    const sendRequest = async () => {
-        // Simula el envío de la solicitud sin hacer nada
-        alert("Solicitud denegada");
-    };
+const Denegar = () => { 
+    const [modalAbierto, setModalAbierto] = useState(false);
     
-
-    // Función para manejar el envío del formulario (TEMPORAL)
-    const handleSubmit = async (e) => {
+    const handleModal= async (e) => {
         e.preventDefault();
-        await sendRequest(); // Llama a la función simulada
+        setModalAbierto(true);
     };
+
 
     return (
-        <button className='deny-button' onClick={handleSubmit} >
-        Denegar
-        </button> 
+        <div>
+            <button className='deny-button' onClick={handleModal} >
+            Denegar
+            </button> 
+            {modalAbierto && 
+            <Justificacion
+            modalAbierto={modalAbierto}
+            setModalAbierto={setModalAbierto}
+            />}
+        </div>
       );
 
 };

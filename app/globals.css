@@ -3,56 +3,108 @@ body {
   padding: 0;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
+  background-color: #f1f9ff;
 }
 
+.header {
+  display: flex;
+  align-items: left;
+  background-color: #f1f9ff;
+  font-size: 30px; 
+  font-weight: bold; 
+  color: #2c3e50;
+  text-align: left; 
+  margin-top: 5px; 
+  padding-left: 80px;
+  gap: 1rem;
+}
+.icon {
+  margin-top: 10px;
+  width: 80px; 
+  height: 80px;
+}
 /* Ajustes del calendario principal */
+
+/* :root {
+  --fc-small-font-size: .85em;
+  --fc-page-bg-color: #fff;
+  --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
+  --fc-neutral-text-color: #808080;
+  --fc-border-color: #ddd;
+
+  --fc-button-text-color: #fff;
+  --fc-button-bg-color: #2C3E50;
+  --fc-button-border-color: #2C3E50;
+  --fc-button-hover-bg-color: #1e2b37;
+  --fc-button-hover-border-color: #1a252f;
+  --fc-button-active-bg-color: #1a252f;
+  --fc-button-active-border-color: #151e27;
+
+  --fc-event-bg-color: #3788d8;
+  --fc-event-border-color: #3788d8;
+  --fc-event-text-color: #fff;
+  --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
+
+  --fc-more-link-bg-color: #d0d0d0;
+  --fc-more-link-text-color: inherit;
+
+  --fc-event-resizer-thickness: 8px;
+  --fc-event-resizer-dot-total-width: 8px;
+  --fc-event-resizer-dot-border-width: 1px;
+
+  --fc-non-business-color: rgba(215, 215, 215, 0.3);
+  --fc-bg-event-color: rgb(143, 223, 130);
+  --fc-bg-event-opacity: 0.3;
+  --fc-highlight-color: rgba(188, 232, 241, 0.3);
+  --fc-today-bg-color: rgba(255, 220, 40, 0.15);
+  --fc-now-indicator-color: red;
+} */
+.fc {
+  border-radius: 20px; /* Bordes redondeados para el calendario */
+  overflow: hidden; /* Asegura que los bordes redondeados se apliquen correctamente */
+}
+
+.fc-event {
+  background-color: #48CFCB; /* Color de fondo */
+  color: #ffffff; /* Color del texto */
+  border: none; /* Quita los bordes */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 2px 5px; /* Espaciado interno */
+}
+
+.fc-daygrid-day-number {
+  text-transform: capitalize;
+}
 
 /* Para cambiar el color de la barra superior al calendario */
 .fc-toolbar {
-  background-color: #05a3a3;
+  background-color: #2c3e50;
+  padding-left: 10px;
 }
 
 /* Cambia el color del texto que indica el mes y el año y lo centra */
 .fc-toolbar-title {
+  text-transform: capitalize; /* Capitaliza la primera letra de cada palabra */
   color: #ffffff; /* Cambia el color del texto */
   width: 100%; /* Asegura que el texto ocupe todo el ancho disponible */
 }
 
 /* Color de los eventos en el calendario*/
-.fc-daygrid-event {
+/* .fc-daygrid-event {
   background-color: #77d0e1;
   color: #ffffff;
-}
+} */
 
 /* Cambia el cursor a pointer cuando se pasa por el calendario*/
 .fc-daygrid-day {
+  height: 100px; /* Altura fija para cada día */
+  max-height: 100px; /* Altura máxima para cada día */
   cursor: pointer; 
 }
 
 /* Permite oscurecer el fondo cuando se pasa el cursor por encima de un dia del calendario*/
 .fc-daygrid-day:hover {
   background-color: rgba(0, 145, 255, 0.1); 
-}
-
-.titulo {
-  font-size: 30px; 
-  font-weight: bold; 
-  color: #05a3a3; 
-  text-align: center; 
-  margin-top: 20px; 
-  margin-bottom: 20px; 
-  padding: 10px;
-  border-radius: 5px; 
-}
-
-.calendario {
-  width: 100%; /* Ancho del contenedor del calendario */
-  max-width: 1200px; /* Ancho máximo del contenedor del calendario */
-  margin: 0 auto; /* Centra el calendario horizontalmente */
-  height: 600px; /* Altura del contenedor del calendario */
-  max-height: 800px; /* Altura máxima del contenedor del calendario */
-  border-radius: 10px; /* Bordes redondeados */
-  background-color: #f1f9ff;
 }
 
 .ventana {
@@ -65,7 +117,6 @@ body {
   background-color: #f1f9ff; 
 }
 
-
 .calendario {
   width: 100%; /* Ancho del contenedor del calendario */
   max-width: 1200px; /* Ancho máximo del contenedor del calendario */
@@ -73,7 +124,7 @@ body {
   height: 600px; /* Altura del contenedor del calendario */
   max-height: 800px; /* Altura máxima del contenedor del calendario */
   border-radius: 10px;
-  background-color: #f1f9ff;
+  background-color: #ffffff;
 }
 
 /* Modal de ver las reservas del estudio */
@@ -98,6 +149,11 @@ body {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   z-index: 60;
   animation: pop-up 0.4s;
+  min-width: 300px;
+  max-width: 1000px;
+  min-height: 100px;
+  max-height: 1000px;
+  overflow: auto; /* Permite el desplazamiento si el contenido excede el tamaño máximo */
 }
 
 @keyframes pop-up {
@@ -219,6 +275,15 @@ body {
   border-radius: 20px;
   border: none;
 }
+
+.timeInput {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}
+
 .timePicker {
   background-color: #ffffff;
   border-radius: 20px;
@@ -245,13 +310,20 @@ body {
   border: none; 
 }
 
+/* Interfaz visible por administrador  */
+
+.page-title {
+  color: #2c3e50; /* Color del texto */
+  font-size: 2rem; /* Tamaño de la fuente */
+  text-align: center; /* Centra el texto */
+}
+
 .listApplication {
   font-size: 15px; /* Tamaño de fuente */
   font-weight: bold; /* Peso de la fuente */
   color: #1f2626; /* Color del texto */
   text-align: left; /* Alineación del texto */
   align-items: left;
-  margin-top: 20px; /* Margen superior */
   margin-bottom: 20px; /* Margen inferior */
   margin-left: 10px; /* Margen izquierdo */
   padding: 10px; /* Relleno */
@@ -261,7 +333,16 @@ body {
 }
 
 .application-table {
-  padding: 20px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+.approval-buttons {
+  display: flex; /* Permite alinear y distribuir el espacio entre los elementos hijos */
+  justify-content: right; /* centra los elementos hijos horizontalmente dentro del contenedor flex */
+  align-items: center; /* centra los elementos hijos verticalmente dentro del contenedor flex */
+  gap: 10px;
 }
 
 .accept-button {
@@ -286,34 +367,28 @@ body {
   cursor: pointer;
 }
 
+.justification-area {
+    width: 337px;
+    height: 128px;
+    background: "white";
+    color: "black";
+    border-color: "gray";
+    padding: 10px; 
+    border-radius: 10px;
+}
+
+/* Para que se oscurezca al pasar el cursor */
 .table-cell-hover:hover {
   background-color: rgba(131, 159, 180, 0.1); 
 }
 
 .table-header th {
-  color: #165e5e;
-  background-color: #fafcff;
+  color: #f4ffff;
+  font-weight: bold;
+  background-color: #2c3e50;
 }
 
-/* Modal que muestra la descripción de una solicitud */
-.descrip-overlay {
-  position: fixed; /* Fija el elemento en la ventana, se posiciona en relación con la ventana */
-  top: 0; /* establece posición superior del elemento en 0 pixeles desde la parte superior */
-  left: 0; 
-  right: 0; 
-  bottom: 0; 
-  display: flex; /* Permite alinear y distribuir el espacio entre los elementos hijos */
-  justify-content: center; /* centra los elementos hijos horizontalmente dentro del contenedor flex */
-  align-items: center; /* centra los elementos hijos verticalmente dentro del contenedor flex */
-  background-color: rgba(23, 38, 70, 0.5);
-  z-index: 50; /* establece el nivel de apilamiento del elemento */
-}
-
-.descrip-content {
-  background-color: #f1f9ff;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  z-index: 60;
-  animation: pop-up 0.4s;
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
 }

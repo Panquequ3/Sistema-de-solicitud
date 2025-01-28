@@ -20,7 +20,6 @@ Para el proyecto se utilizaron las siguientes librerias.
 
 Para el calendario principal que se muestra en la interfaz de inicio.
 ```bash 
-npm install fullcalendar
 npm install fullcalendar @fullcalendar/core @fullcalendar/daygrid
 ```
 * [MUI](https://mui.com/material-ui/getting-started/installation/)

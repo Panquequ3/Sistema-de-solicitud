@@ -252,6 +252,7 @@ body {
 }
 
 .divider-style {
+  padding-top: 1rem;
   color: #05a3a3;
   font-weight: bold; /* Peso de la fuente */
   font-size: 18px; /* Tamaño de la fuente */
@@ -272,21 +273,20 @@ body {
 
 .datePicker {
   background-color: #ffffff;
-  border-radius: 20px;
+  border-radius: 10px;
   border: none;
 }
 
-.timeInput {
+.form-input {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  gap: 1rem;
+  gap: 25px;
 }
 
 .timePicker {
   background-color: #ffffff;
-  border-radius: 20px;
+  border-radius: 10px;
   border: none; 
 }
 
@@ -306,7 +306,7 @@ body {
 
 .textField {
   background-color: #ffffff;
-  border-radius: 20px;
+  border-radius: 10px;
   border: none; 
 }
 
@@ -367,7 +367,7 @@ body {
   cursor: pointer;
 }
 
-.justification-area {
+.text-area {
     width: 337px;
     height: 128px;
     background: "white";
@@ -391,4 +391,9 @@ body {
 .modal-header {
   display: flex;
   justify-content: flex-end;
+}
+
+/* Estilos personalizados para TextField */
+.custom-textfield .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: green; /* Color del borde al enfocar */
 }

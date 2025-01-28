@@ -5,7 +5,7 @@ import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import ModalSolicitud from './pop-up/ModalSolicitud';
-
+import { obtenerSolicitudes } from './api'; // Importa la función de fetch
 
 // Componente que renderiza el calendario con las reservas del estudio
 
@@ -28,7 +28,7 @@ const Calendario = () => {
         return {
           title: solicitud.nombre_estudiante,
           start: solicitud.fecha,
-          time: `${solicitud.hora_inicio} - ${solicitud.hora_fin}`,
+          time: `${solicitud.hora_inicio} - ${solicitud.hora_fin}`
         };
       });
       
@@ -43,6 +43,7 @@ const Calendario = () => {
     obtenerSolicitudes();
   }, []);
 
+  // useEffect para renderizar el calendario cuando los eventos cambian
   useEffect(() => {
     const calendar = new Calendar(calendarRef.current, {
       plugins: [dayGridPlugin, interactionPlugin],

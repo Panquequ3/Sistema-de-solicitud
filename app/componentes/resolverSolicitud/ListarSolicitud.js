@@ -33,7 +33,7 @@ const ListarSolicitud = () => {
           title: solicitud.nombre_estudiante,
           email: solicitud.email,
           start: solicitud.fecha,
-          desc: "falta",
+          desc: solicitud.descripcion,
           startTime: solicitud.hora_inicio,
           endTime: solicitud.hora_fin,
         };
@@ -44,9 +44,10 @@ const ListarSolicitud = () => {
       console.error('Error:', error);
     }
   };
-    useEffect(() => {
-      obtenerSolicitudes();
-    }, []);
+  
+  useEffect(() => {
+    obtenerSolicitudes();
+  }, []);
 
   const handleDescClick = (desc) => {
     setDescripcion(desc);

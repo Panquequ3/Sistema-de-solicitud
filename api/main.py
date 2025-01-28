@@ -53,7 +53,7 @@ def crear_solicitud(solicitud: SolicitudCreate, db: Session = Depends(get_db)):
 
 # Ruta GET para obtener una solicitud por su ID
 @app.get("/solicitudes/{solicitud_id}", response_model=SolicitudResponse)
-def muestra_solicitud(solicitud_id: int, db: Session = Depends(get_db)):
+def solicitud_por_id(solicitud_id: int, db: Session = Depends(get_db)):
     db_solicitud = db.query(models.Solicitud).filter(models.Solicitud.id_solicitud == solicitud_id).first()
     if db_solicitud is None:
         raise HTTPException(status_code=404, detail="No se encontraron solicitudes")
@@ -67,9 +67,9 @@ def obtener_solicitudes(db: Session = Depends(get_db)):
 # Ruta GET para obtener todas las solicitudes con información del estudiante
 @app.get("/solicitudesEstudiantes/", response_model=List[SolicitudEstudianteResponse])
 def obtener_solicitudes_con_estudiantes(db: Session = Depends(get_db)):
-    solicitudes = db.query(models.Solicitud).all()
+    solicitudes = db.query(models.Solicitud).all() # Obtiene todas las solicitudes mediante una consulta para la tabla solicitud
     solicitudes_con_estudiantes = []
-    for solicitud in solicitudes:
+    for solicitud in solicitudes: # Recorremos todas las solicitudes
         estudiante = db.query(models.Estudiante).filter(models.Estudiante.id_estudiante == solicitud.id_estudiante).first()
         if estudiante:
             solicitud_data = {
@@ -79,6 +79,7 @@ def obtener_solicitudes_con_estudiantes(db: Session = Depends(get_db)):
                 "hora_fin": solicitud.hora_fin,
                 "id_estado": solicitud.id_estado,
                 "id_estudiante": solicitud.id_estudiante,
+                "descripcion": solicitud.descripcion,
                 "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
                 "email": estudiante.email
             }
@@ -87,7 +88,7 @@ def obtener_solicitudes_con_estudiantes(db: Session = Depends(get_db)):
 
 # Ruta PUT para actualizar una solicitud existente
 @app.put("/solicitudes/{solicitud_id}", response_model=SolicitudResponse)
-def update_solicitud(solicitud_id: int, solicitud: SolicitudUpdate, db: Session = Depends(get_db)):
+def estado_solicitud(solicitud_id: int, solicitud: SolicitudUpdate, db: Session = Depends(get_db)):
     db_solicitud = db.query(models.Solicitud).filter(models.Solicitud.id_solicitud == solicitud_id).first()
     if db_solicitud is None:
         raise HTTPException(status_code=404, detail="No se encontraron solicitudes")

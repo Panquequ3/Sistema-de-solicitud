@@ -31,6 +31,7 @@ class SolicitudBase(BaseModel):
     hora_fin: time
     fecha: date
     id_estudiante: int
+    descripcion: str
 
 class SolicitudCreate(SolicitudBase):
     pass
@@ -44,7 +45,7 @@ class SolicitudResponse(SolicitudBase):
     class Config:
         from_attributes = True
 
-# Nueva clase para la respuesta de solicitudes con información del estudiante
+# Clase para la respuesta de solicitudes con información del estudiante
 class SolicitudEstudianteResponse(BaseModel):
     id_solicitud: int
     fecha: date
@@ -52,6 +53,7 @@ class SolicitudEstudianteResponse(BaseModel):
     hora_fin: time
     id_estado: int
     id_estudiante: int
+    descripcion: str
     nombre_estudiante: str
     email: str
 

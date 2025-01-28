@@ -49,7 +49,7 @@ const Justificacion = ({
                 style={{
                     borderColor: error ? 'red' : 'gray', // Cambia el color del borde si hay error
                 }}
-                className="justification-area"
+                className="text-area"
                 placeholder="Inserte la justificación"
               />
               {error && 

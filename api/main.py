@@ -62,7 +62,7 @@ def solicitud_por_id(solicitud_id: int, db: Session = Depends(get_db)):
 # Ruta GET para obtener todas las solicitudes
 @app.get("/solicitudes/", response_model=List[SolicitudResponse])
 def obtener_solicitudes(db: Session = Depends(get_db)):
-    return db.query(models.Solicitud).all()
+    return db.query(models.Solicitud).order_by(models.Solicitud.id_solicitud.desc()).all()
 
 # Ruta GET para obtener todas las solicitudes con información del estudiante
 @app.get("/solicitudesEstudiantes/", response_model=List[SolicitudEstudianteResponse])
@@ -85,6 +85,7 @@ def obtener_solicitudes_con_estudiantes(db: Session = Depends(get_db)):
             }
             solicitudes_con_estudiantes.append(solicitud_data)
     return solicitudes_con_estudiantes
+
 
 # Ruta PUT para actualizar una solicitud existente
 @app.put("/solicitudes/{solicitud_id}", response_model=SolicitudResponse)

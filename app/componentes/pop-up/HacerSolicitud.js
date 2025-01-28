@@ -1,12 +1,17 @@
 "use client";
 
+// Componente modal (pop up) que despliega la interfaz de solicitar
+// una reserva del estudio
+
 import { useState } from 'react';
 
-import List from '@mui/material/List';
-import Box from '@mui/material/Box'
+import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
+import { FormLabel } from '@mui/material';
+import { FormControl } from '@mui/material';
+import { FormHelperText } from '@mui/material';
 
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -16,13 +21,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import 'dayjs/locale/es';
-
-
-// Componente modal (pop up) que despliega la interfaz de solicitar
-// una reserva del estudio
-
-const style = { width:'25ch', '& .MuiOutlinedInput-root': { borderRadius: '10px' }}
-// const timeStyle = { width:'25ch', '& .MuiOutlinedInput-root': { borderRadius: '10px' }}
 
 
 const HacerSolicitud = ({
@@ -66,6 +64,7 @@ const HacerSolicitud = ({
         error: false,
         msj: "",
     })
+    
     
     /* funcion para crear el estado*/
     const crearEstado = async () => {
@@ -283,7 +282,7 @@ const HacerSolicitud = ({
   return (
     <div>
       {solicitudAbierto && (
-        <div className="application-overlay" onClick={handleOverlayClick}>
+        <div className="modal-overlay" onClick={handleOverlayClick}>
           <div className="application-content">
             <header className="modal-header">
                 <h1 className="headerApplication">
@@ -308,13 +307,15 @@ const HacerSolicitud = ({
                 </Divider>
 
                 <ListItem>
-                    <DatePicker 
-                        className="datePicker" 
-                        placeholder="Ingrese la fecha" 
-                        sx={{'& .MuiOutlinedInput-root': { borderRadius: '10px' }}}
-                        value={fecha}
-                        onChange={(newValue) => setFecha(newValue)}
-                    />
+                    <FormControl error={fechaError.error}>
+                        <DatePicker 
+                            className="input-field" 
+                            placeholder="Ingrese la fecha" 
+                            value={fecha}
+                            onChange={(newValue) => setFecha(newValue)}
+                        />
+                        <FormHelperText>{fechaError.msj}</FormHelperText>
+                    </FormControl>
                 </ListItem>
 
                 <Divider textAlign="left" component="li" className="divider-style">
@@ -323,22 +324,24 @@ const HacerSolicitud = ({
 
                 <ListItem>
                     <div className="form-input">
-                        <div>
-                            <p>Ingrese la hora de inicio *</p>
-                            <TimePicker sx={style} 
-                                        className="timePicker" 
+                        <FormControl error={horaIniError.error}>
+                            <FormLabel> Ingrese la hora de inicio *</FormLabel>
+                            <TimePicker  
+                                        className="input-field"
                                         required
                                         value={horaInicio}
-                                        onChange={(newValue) => setHoraInicio(newValue)}/>     
-                        </div>
-                        <div>
-                            <p>Ingrese la hora de fin *</p>
-                            <TimePicker sx={style} 
-                                        className="timePicker" 
+                                        onChange={(newValue) => setHoraInicio(newValue)}/>
+                            <FormHelperText>{horaIniError.msj}</FormHelperText>
+                        </FormControl>
+                        <FormControl error={horaFinError.error}>
+                            <FormLabel> Ingrese la hora de fin *</FormLabel>
+                            <TimePicker 
+                                        className="input-field" 
                                         required
                                         value={horaFin}
                                         onChange={(newValue) => setHoraFin(newValue)}/>
-                        </div>
+                            <FormHelperText>{horaFinError.msj}</FormHelperText>
+                        </FormControl>
                     </div>
                 </ListItem>
 
@@ -351,12 +354,11 @@ const HacerSolicitud = ({
                 </ListItem>
                 <ListItem>
                     <div className="form-input">
-                        <div>
-                            <p>Nombre *</p>
+                        <FormControl error={nombreError.error}>
+                            <FormLabel>Nombre *</FormLabel>
                             <TextField 
                                 required 
-                                sx={style} 
-                                className="textField"
+                                className="input-field"
                                 id="name"
                                 type="name"
                                 name="name"
@@ -367,12 +369,11 @@ const HacerSolicitud = ({
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)}
                             />
-                        </div>
-                        <div>
-                        <p>Apellido *</p>
+                        </FormControl>
+                        <FormControl error={apellidoError.error}>
+                            <FormLabel>Apellido *</FormLabel>
                             <TextField 
-                                sx={style}
-                                className="textField" 
+                                className="input-field" 
                                 id="lastname"
                                 type="lastname"
                                 name="lastname"
@@ -384,15 +385,14 @@ const HacerSolicitud = ({
                                 value={apellido}
                                 onChange={(e) => setApellido(e.target.value)}
                             />
-                        </div>
+                        </FormControl>
                     </div>
                 </ListItem>
                 <ListItem>
-                    <div>
-                        <p>Email *</p>
+                    <FormControl error={emailError.error}>
+                        <FormLabel> Email *</FormLabel>
                         <TextField 
-                            sx={{width:'53ch', '& .MuiOutlinedInput-root': { borderRadius: '10px' }}} 
-                            className="textField"
+                            className="email-field"
                             id="email"
                             type="email"
                             name="email"
@@ -404,7 +404,7 @@ const HacerSolicitud = ({
                             value={email}
                             onChange={(e) => setEmail(e.target.value.toLowerCase())}
                         />
-                    </div>
+                    </FormControl>
                 </ListItem>
 
                 <Divider textAlign="left" component="li" className="divider-style">
@@ -412,23 +412,17 @@ const HacerSolicitud = ({
                 </Divider>
 
                 <ListItem>
-                    <div>
+                    <FormControl error={descError.error} fullWidth>
                         <textarea
                             value={descripcion}
                             onChange={(e) => setDescripcion(e.target.value)}
-                            style={{
-                                borderColor: descError.error ? 'red' : 'gray', // Cambia el color del borde si hay error
-                            }}
                             className="text-area"
                             placeholder="Inserte aquí la descripción"
+                            style={{ width: "460px", borderColor: descError.error ? '#d32f2f' : 'gray' }}
                         />
-                        {descError && 
-                        <div style={{ textAlign: 'center', color: 'red' }}>
-                        {descError.msj}
-                        </div>}
-                    </div>
+                        <FormHelperText>{descError.msj}</FormHelperText>
+                    </FormControl>
                 </ListItem>
-
             </Box>
             </LocalizationProvider>
 

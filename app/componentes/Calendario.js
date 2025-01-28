@@ -28,7 +28,7 @@ const Calendario = () => {
         return {
           title: solicitud.nombre_estudiante,
           start: solicitud.fecha,
-          time: `${solicitud.hora_inicio} - ${solicitud.hora_fin}`
+          time: `${solicitud.hora_inicio.slice(0,5)} - ${solicitud.hora_fin.slice(0,5)}`
         };
       });
       

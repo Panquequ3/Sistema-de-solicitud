@@ -58,7 +58,7 @@ class SolicitudEstudianteResponse(BaseModel):
     email: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Esquema justificaciones (al denegar una solicitud) #
 

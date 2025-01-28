@@ -34,8 +34,8 @@ const ListarSolicitud = () => {
           email: solicitud.email,
           start: solicitud.fecha,
           desc: solicitud.descripcion,
-          startTime: solicitud.hora_inicio,
-          endTime: solicitud.hora_fin,
+          startTime: solicitud.hora_inicio.slice(0,5), // Obtenemos el string que nos interesa
+          endTime: solicitud.hora_fin.slice(0,5), // o sea, solo el HH:MM
         };
       });
       

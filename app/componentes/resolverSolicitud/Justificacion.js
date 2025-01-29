@@ -8,15 +8,12 @@ import { useState } from 'react';
 const Justificacion = ({
     modalAbierto,
     setModalAbierto,
+    id_solicitud,
+    actualizar,
 }) => {
 
   const [justificacion, setJustificacion] = useState('');
   const [error, setError] = useState(false);
-    // Función simulada para enviar la solicitud (TEMPORAL)
-    const sendRequest = async () => {
-        // Simula el envío de la solicitud sin hacer nada
-        alert("Solicitud denegada");
-    };
     
     // Función para manejar el envío del formulario (TEMPORAL)
     const handleSubmit = async (e) => {
@@ -27,12 +24,44 @@ const Justificacion = ({
             return;
           }
         setModalAbierto(false);
-        await sendRequest(); // Llama a la función simulada
+        await enviaJustificacion(); 
     };
 
+  // Funcion que setea el valor en la justificacion
   const handleChange = (ev) => {
     setJustificacion(ev.target.value);
   };
+
+  // Función que llama a la API para crear la justificación en la DB
+  const enviaJustificacion = async () => {
+    setModalAbierto(true);
+
+    try {
+        const response = await fetch(`http://localhost:8000/justificacion/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id_solicitud: id_solicitud,
+                contenido: justificacion
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Fallo al guardar la justificacion");
+        }
+
+        const data = await response.json();
+        console.log("Justificación guardada:", data); // Log de depuración
+
+        actualizar(); // Actualizamos la lista de solicitudes
+
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+}
 
   return (
     <div>

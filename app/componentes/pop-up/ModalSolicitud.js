@@ -12,6 +12,7 @@ const ModalSolicitud = ({
     setModalAbierto,
     fechaSeleccionada,
     events,
+    actualizar,
 }) => {
 
   const [solicitudAbierto, setSolicitudAbierto] = useState(false);
@@ -69,6 +70,7 @@ const ModalSolicitud = ({
         <HacerSolicitud
           solicitudAbierto={solicitudAbierto}
           setSolicitudAbierto={setSolicitudAbierto}
+          actualizar={actualizar}
         />
       )}
     </div>

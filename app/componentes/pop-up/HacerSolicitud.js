@@ -26,6 +26,7 @@ import 'dayjs/locale/es';
 const HacerSolicitud = ({
     solicitudAbierto,
     setSolicitudAbierto,
+    actualizar,
 }) => {
     // ESTADOS PARA MANEJAR LA INFO //
     const [nombre, setNombre] = useState('')
@@ -260,6 +261,9 @@ const HacerSolicitud = ({
             }
 
             const data = await response.json();
+
+            actualizar();
+
             console.log("Solicitud creada:", data);
         } catch (error) {
             console.error("Error:", error);

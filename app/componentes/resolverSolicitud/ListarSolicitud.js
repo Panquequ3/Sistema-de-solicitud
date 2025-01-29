@@ -22,7 +22,7 @@ const ListarSolicitud = () => {
 
   const obtenerSolicitudes = async () => {
     try {
-      const response = await fetch('http://localhost:8000/solicitudesEstudiantes/');
+      const response = await fetch('http://localhost:8000/solicitudesInfo/');
       if (!response.ok) {
         throw new Error('Fallo al obtener solicitudes');
       }
@@ -36,6 +36,8 @@ const ListarSolicitud = () => {
           desc: solicitud.descripcion,
           startTime: solicitud.hora_inicio.slice(0,5), // Obtenemos el string que nos interesa
           endTime: solicitud.hora_fin.slice(0,5), // o sea, solo el HH:MM
+          id_solicitud: solicitud.id_solicitud,
+          estado: solicitud.estado,
         };
       });
       
@@ -88,10 +90,13 @@ const ListarSolicitud = () => {
                   </span>
                   </TableCell>
                 <TableCell align="right">
+                {(event.estado === "pendiente") && (
                   <div className='approval-buttons'>
                     <Aceptar />
-                    <Denegar />
+                    <Denegar id_solicitud={event.id_solicitud} actualizar = {obtenerSolicitudes}
+                    />
                   </div>
+                )}
                   </TableCell>
               </TableRow>
             ))}

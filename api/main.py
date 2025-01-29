@@ -5,9 +5,10 @@ import models # Donde están las tablas de la base de datos
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session, joinedload
 from schemas import ( EstudianteBase, EstudianteCreate, EstudianteResponse,
-    SolicitudBase, SolicitudCreate, SolicitudUpdate, SolicitudResponse, SolicitudEstudianteResponse,
+    SolicitudBase, SolicitudCreate, SolicitudUpdate, SolicitudResponse, SolicitudCompletaResponse,
     JustificacionBase, JustificacionCreate, JustificacionResponse,
     EtapaBase, EtapaCreate, EtapaResponse )
+from sqlalchemy import and_
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -65,19 +66,20 @@ def obtener_solicitudes(db: Session = Depends(get_db)):
     return db.query(models.Solicitud).order_by(models.Solicitud.id_solicitud.desc()).all()
 
 # Ruta GET para obtener todas las solicitudes con información del estudiante
-@app.get("/solicitudesEstudiantes/", response_model=List[SolicitudEstudianteResponse])
+@app.get("/solicitudesInfo/", response_model=List[SolicitudCompletaResponse])
 def obtener_solicitudes_con_estudiantes(db: Session = Depends(get_db)):
     solicitudes = db.query(models.Solicitud).all() # Obtiene todas las solicitudes mediante una consulta para la tabla solicitud
     solicitudes_con_estudiantes = []
     for solicitud in solicitudes: # Recorremos todas las solicitudes
         estudiante = db.query(models.Estudiante).filter(models.Estudiante.id_estudiante == solicitud.id_estudiante).first()
+        etapa = db.query(models.Etapa).filter(models.Etapa.id_estado == solicitud.id_estado).first()
         if estudiante:
             solicitud_data = {
                 "id_solicitud": solicitud.id_solicitud,
                 "fecha": solicitud.fecha,
                 "hora_inicio": solicitud.hora_inicio,
                 "hora_fin": solicitud.hora_fin,
-                "id_estado": solicitud.id_estado,
+                "estado": etapa.estado,
                 "id_estudiante": solicitud.id_estudiante,
                 "descripcion": solicitud.descripcion,
                 "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
@@ -136,4 +138,20 @@ def obtener_estado(estado_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Estado no encontrado")
     return db_estado
 
+""" JUSTIFICACION """
+# Ruta POST para crear una justificacion
+@app.post("/justificacion/", response_model=JustificacionResponse)
+def crear_justificacion(justificacion: JustificacionCreate, db: Session = Depends(get_db)):
+    # Crear una instancia del modelo Justificacion con los datos recibidos
+    db_justificacion = models.Justificacion(**justificacion.dict())
 
+    # Agregar la justificación a la sesión de la base de datos
+    db.add(db_justificacion)
+
+    # Confirmar la transacción
+    db.commit()
+
+    # Refrescar la instancia para obtener los datos actualizados de la base de datos
+    db.refresh(db_justificacion)
+    
+    return db_justificacion

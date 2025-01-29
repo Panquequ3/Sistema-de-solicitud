@@ -18,7 +18,7 @@ const Calendario = () => {
 
   const obtenerSolicitudes = async () => {
     try {
-      const response = await fetch('http://localhost:8000/solicitudesEstudiantes/');
+      const response = await fetch('http://localhost:8000/solicitudesInfo/');
       if (!response.ok) {
         throw new Error('Fallo al obtener solicitudes');
       }
@@ -75,6 +75,7 @@ const Calendario = () => {
         setModalAbierto={setModalAbierto}
         fechaSeleccionada={fechaSeleccionada}
         events={eventos}
+        actualizar={obtenerSolicitudes}
       />
 
     </div>

@@ -36,7 +36,7 @@ class SolicitudBase(BaseModel):
 class SolicitudCreate(SolicitudBase):
     pass
 
-class SolicitudUpdate(SolicitudBase):
+class SolicitudUpdate(BaseModel):
     id_estado: int # Ya que solo cambiaran de estado
 
 class SolicitudResponse(SolicitudBase):
@@ -46,12 +46,12 @@ class SolicitudResponse(SolicitudBase):
         from_attributes = True
 
 # Clase para la respuesta de solicitudes con información del estudiante
-class SolicitudEstudianteResponse(BaseModel):
+class SolicitudCompletaResponse(BaseModel):
     id_solicitud: int
     fecha: date
     hora_inicio: time
     hora_fin: time
-    id_estado: int
+    estado: str
     id_estudiante: int
     descripcion: str
     nombre_estudiante: str

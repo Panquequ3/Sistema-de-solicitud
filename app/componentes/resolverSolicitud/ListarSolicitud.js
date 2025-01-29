@@ -12,7 +12,7 @@ import Denegar from './Denegar';
 import Descripcion from './Descripcion';
 import { useEffect, useState } from 'react';
 
-// Componente que lista todas las solicitudes pendientes para ser visualizadas
+// Componente que lista todas las solicitudes para ser visualizadas y resueltas
 // por el administrador
 
 const ListarSolicitud = () => {
@@ -90,12 +90,15 @@ const ListarSolicitud = () => {
                   </span>
                   </TableCell>
                 <TableCell align="right">
-                {(event.estado === "pendiente") && (
+                {(event.estado === "pendiente") ? (
                   <div className='approval-buttons'>
-                    <Aceptar />
-                    <Denegar id_solicitud={event.id_solicitud} actualizar = {obtenerSolicitudes}
-                    />
+                    <Aceptar id_solicitud={event.id_solicitud} actualizar = {obtenerSolicitudes}/>
+                    <Denegar id_solicitud={event.id_solicitud} actualizar = {obtenerSolicitudes}/>
                   </div>
+                ) : (
+                  <span>
+                  {event.estado === "denegado" ? "Denegado" : "Aceptado"}
+                  </span>                  
                 )}
                   </TableCell>
               </TableRow>

@@ -1,26 +1,72 @@
 import "@/app/globals.css";
-import { useState } from "react";
 
 // Componente: Botón que permite aceptar una solicitud pendiente
 
-const Aceptar = () => { 
+const Aceptar = ({ id_solicitud, actualizar }) => { 
 
+    const crearEstado = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/estado/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    estado: "aceptado"
+                }),
+            });
 
-    // Función simulada para enviar la solicitud (TEMPORAL)
-    const sendRequest = async () => {
-        // Simula el envío de la solicitud sin hacer nada
-        alert("Solicitud aceptada!");
+            if (!response.ok) {
+                throw new Error("Fallo al crear el estado");
+            }
+
+            const data = await response.json();
+            return data.id_estado;
+        } catch (error) {
+            console.error("Error:", error);
+            return null;
+        }
     };
-    
 
-    // Función para manejar el envío del formulario (TEMPORAL)
-    const handleSubmit = async (e) => {
+    const actualizaSolicitud = async (e) => {
         e.preventDefault();
-        await sendRequest(); // Llama a la función simulada
-    };
+
+        const id_estado = await crearEstado();
+        if (!id_estado){
+            alert("hubo un error! no se encontró el id");
+            return;
+        }
+        console.log(id_solicitud);
+        try {
+            const response = await fetch(`http://localhost:8000/solicitudes/${id_solicitud}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id_estado: id_estado
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Fallo al actualizar el estado de la solicitud");
+            }
+
+            const data = await response.json();
+
+            actualizar(); // ACtualizamos la lista de solicitudes
+
+            return data.id_estado;
+
+        } catch (error) {
+            console.error("Error:", error);
+            return null;
+        }
+
+    }
 
     return (
-        <button className='accept-button' onClick={handleSubmit} >
+        <button className='accept-button' onClick={actualizaSolicitud} >
         Aceptar
         </button> 
       );

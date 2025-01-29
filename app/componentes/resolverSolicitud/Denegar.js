@@ -1,6 +1,7 @@
 import "@/app/globals.css";
 import { useState } from "react";
 import Justificacion from "./Justificacion";
+
 // Componente: Botón que permite denegar una solicitud pendiente
 
 const Denegar = ({ id_solicitud, actualizar }) => { 

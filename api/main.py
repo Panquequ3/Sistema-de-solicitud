@@ -112,9 +112,22 @@ def crear_estudiante(estudiante: EstudianteCreate, db: Session = Depends(get_db)
     db.refresh(db_estudiante)
     return db_estudiante
 
-@app.get("/estudiante/{estudiante_id}", response_model=EstudianteResponse)
-def obtener_estudiante(estudiante_id: int, db: Session = Depends(get_db)):
-    db_estudiante = db.query(models.Estudiante).filter(models.Estudiante.id_estudiante == estudiante_id).first()
+# @app.post("/estudiante/{email}", response_model=EstudianteResponse)
+# def obtiene_estudiante(estudiante: EstudianteCreate, email: str, db: Session = Depends(get_db)):
+#     # Consulta si el estudiante existe
+#     db_estudiante = db.query(models.Estudiante).filter(models.Estudiante.email == email).first() 
+#     # Si no existe, entonces lo crea
+#     if db_estudiante is None:
+#         db_estudiante = models.Estudiante(**estudiante.dict())
+#         db.add(db_estudiante)
+#         db.commit()
+#         db.refresh(db_estudiante)
+
+#     return db_estudiante # Retorna el estudiante
+
+@app.get("/estudiante/{email}", response_model=EstudianteResponse)
+def obtener_estudiante(email: str, db: Session = Depends(get_db)):
+    db_estudiante = db.query(models.Estudiante).filter(models.Estudiante.email == email).first()
     if db_estudiante is None:
         raise HTTPException(status_code=404, detail="Estudiante no encontrado")
     return db_estudiante

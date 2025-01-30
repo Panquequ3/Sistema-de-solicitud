@@ -52,7 +52,7 @@ const ModalSolicitud = ({
                 <h4 className="subtitle">Reservas del estudio para el día {fechaSeleccionada}</h4>
                 <ul>
                   {/* Verifica que existan eventos, de existir entonces renderiza el componente */}
-                  {eventos.length > 0 ? (
+                  { eventos.length > 0 ? (
                   eventos.map((event, index) => (
                     <div className="application" key={index}>{event.title} - {event.time}</div>
                   )) 

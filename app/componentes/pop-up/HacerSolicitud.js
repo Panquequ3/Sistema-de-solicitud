@@ -92,6 +92,27 @@ const HacerSolicitud = ({
         }
     };
 
+    /* Función que busca si el correo ya está asociado a un estudiante */
+    const buscaEstudiante = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/estudiante/${email}`);
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    // Si el estudiante no se encuentra, devolver null
+                    return null;
+                }
+                throw new Error("Fallo al verificar la existencia del estudiante");
+            }
+
+            const data = await response.json();
+            return data.id_estudiante;
+        } catch (error) {
+            console.error("Error:", error);
+            return null;
+        }
+    };
+
     /* funcion para crear al estudiante */
     const crearEstudiante = async () => {
         try {
@@ -226,16 +247,25 @@ const HacerSolicitud = ({
     };
 
     const sendRequest = async () => {
+
         if (!validarCampos()) {
             alert("hubo un error");
             return;
         }
-
         try {
-            const idEstudiante = await crearEstudiante();
+            // Buscamos si el estudiante existe (Se busca por email, ya que cada estudiante tiene un email unico)
+            let idEstudiante = await buscaEstudiante();
+            if (!idEstudiante) {
+                console.log("El estudiante no fue encontrado");
+                // Si no existe, lo creamos
+                idEstudiante = await crearEstudiante();
+            } else {
+                console.log("El estudiante existe!");
+            }
             if (!idEstudiante) {
                 throw new Error("No se pudo crear y obtener el ID del estudiante");
             }
+
             const idEstado = await crearEstado();
             if (!idEstado) {
                 throw new Error("No se pudo crear y obtener el ID del estado");

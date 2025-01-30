@@ -1,8 +1,13 @@
+@import url('~@fontsource/roboto/300.css');
+@import url('~@fontsource/roboto/400.css');
+@import url('~@fontsource/roboto/500.css');
+@import url('~@fontsource/roboto/700.css');
+
 body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   background-color: #f1f9ff;
 }
 
@@ -23,49 +28,15 @@ body {
   width: 80px; 
   height: 80px;
 }
-/* Ajustes del calendario principal */
 
-/* :root {
-  --fc-small-font-size: .85em;
-  --fc-page-bg-color: #fff;
-  --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
-  --fc-neutral-text-color: #808080;
-  --fc-border-color: #ddd;
-
-  --fc-button-text-color: #fff;
-  --fc-button-bg-color: #2C3E50;
-  --fc-button-border-color: #2C3E50;
-  --fc-button-hover-bg-color: #1e2b37;
-  --fc-button-hover-border-color: #1a252f;
-  --fc-button-active-bg-color: #1a252f;
-  --fc-button-active-border-color: #151e27;
-
-  --fc-event-bg-color: #3788d8;
-  --fc-event-border-color: #3788d8;
-  --fc-event-text-color: #fff;
-  --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
-
-  --fc-more-link-bg-color: #d0d0d0;
-  --fc-more-link-text-color: inherit;
-
-  --fc-event-resizer-thickness: 8px;
-  --fc-event-resizer-dot-total-width: 8px;
-  --fc-event-resizer-dot-border-width: 1px;
-
-  --fc-non-business-color: rgba(215, 215, 215, 0.3);
-  --fc-bg-event-color: rgb(143, 223, 130);
-  --fc-bg-event-opacity: 0.3;
-  --fc-highlight-color: rgba(188, 232, 241, 0.3);
-  --fc-today-bg-color: rgba(255, 220, 40, 0.15);
-  --fc-now-indicator-color: red;
-} */
+/* Config del calendario principal */
 .fc {
   border-radius: 20px; /* Bordes redondeados para el calendario */
   overflow: hidden; /* Asegura que los bordes redondeados se apliquen correctamente */
 }
 
 .fc-event {
-  background-color: #48CFCB; /* Color de fondo */
+  /* background-color: #48CFCB; /* Color de fondo */
   color: #ffffff; /* Color del texto */
   border: none; /* Quita los bordes */
   border-radius: 5px; /* Bordes redondeados */
@@ -138,7 +109,7 @@ body {
 }
 
 .modal-content {
-  background-color: #f1f9ff;
+  background-color: #f5faff;
   padding: 1.5rem;
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -179,7 +150,7 @@ body {
   padding: 0.5rem 1rem;
   background-color: #f49022;
   color: #ffffff;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   border: none;
   cursor: pointer;
 }
@@ -196,26 +167,26 @@ body {
 }
 
 .header-title {
-  color: #05a3a3;
+  color: #2c3e50;
 }
 .subtitle {
-  color: #05a3a3;  
+  color: #34475b;  
 }
 
 /* Modal de hacer solicitud */
 
 .application {
   font-size: 15px; /* Tamaño de fuente */
-  font-weight: bold; /* Peso de la fuente */
+  /* font-weight: bold; Peso de la fuente */
   color: #1f2626; /* Color del texto */
   text-align: left; /* Alineación del texto */
-  align-items: left;
-  margin-top: 20px; /* Margen superior */
-  margin-bottom: 20px; /* Margen inferior */
+  margin-top: 20px; 
+  margin-bottom: 20px; 
+  margin-right: 30px; /* Para centrar el div */
   padding: 10px; /* Relleno */
   background-color: #ffffff; /* Color de fondo */
-  border-radius: 10px; /* Bordes redondeados */
-  border: 1px solid #05a3a3;
+  border-radius: 8px; /* Bordes redondeados */
+  border: none;
 }
 
 .application-content {
@@ -225,7 +196,7 @@ body {
   max-height: 600px; /* Alto máximo */
   overflow-y: auto; /* Habilitar desplazamiento vertical */
   padding: 1rem;
-  background-color: #f1f9ff;
+  background-color: #f5faff; 
   padding: 1.5rem;
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -235,8 +206,8 @@ body {
 
 .divider-style {
   padding-top: 1rem;
-  color: #05a3a3;
-  font-weight: bold; /* Peso de la fuente */
+  color: #1ba1a1;
+  font-weight: bold; 
   font-size: 18px; /* Tamaño de la fuente */
   text-align: left; /* Alineación del texto */
 }
@@ -291,9 +262,9 @@ body {
 }
 
 .headerApplication {
-  color: #091818;
-  font-weight: bold; /* Peso de la fuente */
-  font-size: 20px; /* Tamaño de la fuente */
+  color: #2c3e50;
+  font-weight: bold; 
+  font-size: 20px; 
   text-align: center; /* Alineación del texto */
 }
 

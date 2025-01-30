@@ -10,6 +10,8 @@ import Paper from '@mui/material/Paper'; // Solo para dar apariencia
 import Aceptar from './Aceptar';
 import Denegar from './Denegar';
 import Descripcion from './Descripcion';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { useEffect, useState } from 'react';
 
 // Componente que lista todas las solicitudes para ser visualizadas y resueltas
@@ -19,6 +21,7 @@ const ListarSolicitud = () => {
   const [descAbierto, setDescAbierto] = useState(false);
   const [descripcion, setDescripcion] = useState(null);
   const [eventos, setEventos] = useState([]); // Ejemplos temporales
+  const [filtro, setFiltro] = useState('');
 
   const obtenerSolicitudes = async () => {
     try {
@@ -28,7 +31,9 @@ const ListarSolicitud = () => {
       }
       const data = await response.json();
       
-      const evento = data.map((solicitud) => {
+      const evento = data
+      .filter(solicitud => filtro === '' || solicitud.estado === filtro) // Filtrar por estado
+      .map((solicitud) => {
         return {
           title: solicitud.nombre_estudiante,
           email: solicitud.email,
@@ -61,17 +66,37 @@ const ListarSolicitud = () => {
   
   useEffect(() => {
     obtenerSolicitudes();
-  }, []);
+  }, [filtro]);
 
   const handleDescClick = (desc) => {
     setDescripcion(desc);
     setDescAbierto(true);
   };
 
+  const handleFilter = (event, nuevoFiltro) => {
+    if (nuevoFiltro !== null) {
+      setFiltro(nuevoFiltro);
+    }
+    
+  }
+
   return (
     <div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <ToggleButtonGroup
+        color="default"
+        value={filtro}
+        exclusive // Solo un botón puede ser seleccionado a la vez
+        onChange={handleFilter}
+        className="filter-button"
+      >
+        <ToggleButton value="">Todos</ToggleButton>
+        <ToggleButton value="pendiente">Pendientes</ToggleButton>
+        <ToggleButton value="aceptado">Aceptados</ToggleButton>
+        <ToggleButton value="denegado">Denegados</ToggleButton>
+      </ToggleButtonGroup>
+
+      <TableContainer component={Paper} className="table-container">
+        <Table sx={{ minWidth: 650 }}>
           <TableHead className="table-header">
             <TableRow>
               <TableCell>Estudiante</TableCell>
@@ -87,7 +112,7 @@ const ListarSolicitud = () => {
             {eventos.map((event) => (
               <TableRow
                 className="table-cell-hover"
-                key={event.title}
+                key={event.id_solicitud}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row" >

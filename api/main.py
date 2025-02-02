@@ -7,9 +7,10 @@ from sqlalchemy.orm import Session, joinedload
 from schemas import ( EstudianteBase, EstudianteCreate, EstudianteResponse,
     SolicitudBase, SolicitudCreate, SolicitudUpdate, SolicitudResponse, SolicitudCompletaResponse,
     JustificacionBase, JustificacionCreate, JustificacionResponse,
-    EtapaBase, EtapaCreate, EtapaResponse )
+    EtapaBase, EtapaCreate, EtapaResponse, LoginRequest )
 from sqlalchemy import and_
 from fastapi.middleware.cors import CORSMiddleware
+from passlib.context import CryptContext
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine) # Crear tablas en la base de datos
@@ -33,13 +34,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-# endpoints o rutas #
-
-@app.get("/") # Esto es una ruta, puede ser .get() .post() .put() .delete()
-def index():
-    return "hola mundo"
-
-
+# rutas #
 
 """ SOLICITUDES """
 
@@ -168,3 +163,22 @@ def crear_justificacion(justificacion: JustificacionCreate, db: Session = Depend
     db.refresh(db_justificacion)
     
     return db_justificacion
+
+""" AUTENTICACION """
+
+# Configuración de PassLib para el hashing de contraseñas
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# Función para verificar la contraseña
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+# Ruta de autenticacion
+@app.post("/login/")
+def login(request: LoginRequest, db: Session = Depends(get_db)):
+    db_admin = db.query(models.Administrador).filter(models.Administrador.email == request.email).first()
+    if db_admin is None or not verify_password(request.contrasena, db_admin.contrasena):
+        raise HTTPException(status_code=401, detail="datos incorrectos")
+    return {"message": "Inicio de sesión exitoso"}
+
+

@@ -34,3 +34,9 @@ Para la sección de escoger fecha y hora en hacer solicitud.
 npm install @mui/x-date-pickers
 npm install dayjs
 ```
+
+* [PassLib] (https://passlib.readthedocs.io/en/stable/install.html)
+Para la seguridad de contraseñas (se utiliza bcrypt que es la que recomienda FastAPI)
+```bash
+pip install "passlib[bcrypt]"
+```

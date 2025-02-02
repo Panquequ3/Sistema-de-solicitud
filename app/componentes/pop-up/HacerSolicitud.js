@@ -176,13 +176,13 @@ const HacerSolicitud = ({
             valido = false;
             setEmailError({
                 error: true,
-                msj: "Ingrese un email válido",
+                msj: "Ingrese su correo electrónico",
             })
         } else if(!email.match(re)) {
             valido = false;
             setEmailError({
                 error: true,
-                msj: "Ingrese un email válido",
+                msj: "Ingrese un correo electrónico válido",
             })
         } else {
             setEmailError({

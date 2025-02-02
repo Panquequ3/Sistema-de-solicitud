@@ -41,7 +41,7 @@ class Justificacion(Base):
 class Administrador(Base):
     __tablename__ = "administrador"
 
-    id_justificacion = Column(Integer, primary_key = True, index = True)    
+    id_admin = Column(Integer, primary_key = True, index = True)    
     nombre = Column(String)
     apellido = Column(String)
     contrasena = Column(String)

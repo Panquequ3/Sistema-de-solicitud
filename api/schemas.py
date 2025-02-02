@@ -90,3 +90,9 @@ class EtapaResponse(EtapaBase):
 
     class Config:
         from_attributes = True
+
+# Esquema para autenticacion #
+
+class LoginRequest(BaseModel):
+    email: str
+    contrasena: str

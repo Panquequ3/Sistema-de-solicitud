@@ -14,11 +14,12 @@ import {
     CardHeader,
     Avatar
   } from '@mui/material';
+import { useRouter } from "next/navigation"; 
 import { useState } from 'react';
 import '../globals.css';
 
 const InicioSesion = () => {
-        
+    const router = useRouter();
     const [email, setEmail] = useState('')
     const [emailError, setEmailError] = useState({
         error: false,
@@ -30,6 +31,10 @@ const InicioSesion = () => {
         error: false,
         msj: "",
     })
+    const [inicioError, setInicioError] = useState({
+      error: false,
+      msj: "",
+  })
 
     const validarCampos = () => {
         let valido = true;
@@ -83,12 +88,20 @@ const InicioSesion = () => {
             });
 
             if (!response.ok) {
-                throw new Error("Fallo al iniciar sesion");
+                alert("ERROR!");
+                
+                  setInicioError({
+                      error: true,
+                      msj: "Los datos ingresados son incorrectos.",
+                  })
+
+                throw new Error("Fallo al iniciar sesion");   
             }
 
             const data = await response.json();
-
+            router.push("/admin"); 
             console.log("Ingreso exitoso");
+            alert("Ingreso exitoso!!!!");
         } catch (error) {
             console.error("Error al iniciar sesión:", error);
         }
@@ -133,7 +146,7 @@ const InicioSesion = () => {
                     id="password"
                     type="password"
                     name="password"
-                    placeholder="*****"
+                    placeholder="*********"
                     required
                     variant="outlined"
                     error={contrasenaError.error}
@@ -142,6 +155,11 @@ const InicioSesion = () => {
                     onChange={(e) => setContrasena(e.target.value)}
                 />
               </FormControl>
+              {inicioError.error && 
+              <Typography gutterBottom sx={{ fontSize: 15, color:"#d32f2f"}}>
+                {inicioError.msj}
+              </Typography>
+              }
               <FormControl>
                 <Button className='application-button' onClick={sendRequest}> Ingresar </Button>
               </FormControl>

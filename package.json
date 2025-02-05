@@ -19,6 +19,7 @@
     "@mui/x-date-pickers": "^7.24.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
     "fullcalendar": "^6.1.15",
     "fullcalendar-scheduler": "^6.1.15",
     "next": "15.1.4",

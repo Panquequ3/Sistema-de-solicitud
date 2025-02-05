@@ -129,7 +129,11 @@ const ListarSolicitud = () => {
                 <TableCell align="right">
                 {(event.status === "pendiente") ? (
                   <div className='approval-buttons'>
-                    <Aceptar id_solicitud={event.id_solicitud} actualizar = {obtenerSolicitudes}/>
+                    <Aceptar id_solicitud = {event.id_solicitud} 
+                            actualizar = {obtenerSolicitudes}
+                            destinatario={event.email}
+                            cuerpo="Su solicitud fue aceptada"
+                            />
                     <Denegar id_solicitud={event.id_solicitud} actualizar = {obtenerSolicitudes}/>
                   </div>
                 ) : (

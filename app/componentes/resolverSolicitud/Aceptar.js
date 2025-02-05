@@ -1,8 +1,10 @@
 import "@/app/globals.css";
-
+import { useState } from 'react';
+import Notificacion from "./Notificacion";
 // Componente: Botón que permite aceptar una solicitud pendiente
 
-const Aceptar = ({ id_solicitud, actualizar }) => { 
+const Aceptar = ({ id_solicitud, actualizar, destinatario, cuerpo }) => { 
+    const [enviarNotificacion, setEnviarNotificacion] = useState(false);
 
     const crearEstado = async () => {
         try {
@@ -56,6 +58,8 @@ const Aceptar = ({ id_solicitud, actualizar }) => {
 
             actualizar(); // ACtualizamos la lista de solicitudes
 
+            setEnviarNotificacion(true); // Notificamos por correo
+
             return data.id_estado;
 
         } catch (error) {
@@ -66,9 +70,12 @@ const Aceptar = ({ id_solicitud, actualizar }) => {
     }
 
     return (
-        <button className='accept-button' onClick={actualizaSolicitud} >
-        Aceptar
-        </button> 
+        <>
+            <button className='accept-button' onClick={actualizaSolicitud} >
+            Aceptar
+            </button> 
+            {enviarNotificacion && <Notificacion destinatario={destinatario} cuerpo={cuerpo} />}
+        </>
       );
 
 };

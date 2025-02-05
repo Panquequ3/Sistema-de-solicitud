@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional, List
 from datetime import time, date
 
@@ -96,3 +96,7 @@ class EtapaResponse(EtapaBase):
 class LoginRequest(BaseModel):
     email: str
     contrasena: str
+
+class EmailSchema(BaseModel):
+    email: EmailStr
+    cuerpo: str

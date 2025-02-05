@@ -40,3 +40,9 @@ Para la seguridad de contraseñas (se utiliza bcrypt que es la que recomienda Fa
 ```bash
 pip install "passlib[bcrypt]"
 ```
+
+* [Fastapi-mail] (https://sabuhish.github.io/fastapi-mail/)
+Para notificar a través de un correo electrónico 
+```bash
+pip install fastapi-mail
+```

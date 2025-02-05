@@ -7,10 +7,17 @@ from sqlalchemy.orm import Session, joinedload
 from schemas import ( EstudianteBase, EstudianteCreate, EstudianteResponse,
     SolicitudBase, SolicitudCreate, SolicitudUpdate, SolicitudResponse, SolicitudCompletaResponse,
     JustificacionBase, JustificacionCreate, JustificacionResponse,
-    EtapaBase, EtapaCreate, EtapaResponse, LoginRequest )
+    EtapaBase, EtapaCreate, EtapaResponse, LoginRequest, EmailSchema )
 from sqlalchemy import and_
 from fastapi.middleware.cors import CORSMiddleware
 from passlib.context import CryptContext
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType 
+from starlette.responses import JSONResponse
+from dotenv import load_dotenv
+import os
+
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine) # Crear tablas en la base de datos
@@ -182,3 +189,45 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     return {"message": "Inicio de sesión exitoso"}
 
 
+conf = ConnectionConfig (
+    MAIL_USERNAME = os.getenv("USER"),
+    MAIL_PASSWORD = os.getenv("PASSWORD"),
+    MAIL_FROM = os.getenv("USER_EMAIL"),
+    MAIL_PORT = int(os.getenv("PORT")),
+    MAIL_SERVER = os.getenv("SERVER"),
+    MAIL_FROM_NAME=os.getenv("MAIL_FROM_NAME"),
+    MAIL_STARTTLS = True,
+    MAIL_SSL_TLS = False,
+    USE_CREDENTIALS = True,
+    VALIDATE_CERTS = True
+)
+
+@app.post("/email")
+async def envia(email: EmailSchema) -> JSONResponse:
+    html = f"""<p>{email.cuerpo}</p>"""
+
+    message = MessageSchema(
+        subject="Notificación",
+        recipients=[email.email],
+        body=html,
+        subtype=MessageType.html
+    )
+
+    fm = FastMail(conf)
+    await fm.send_message(message)
+    return JSONResponse(status_code=200, content={"message": "email has been sent"})
+# Endpoint para enviar correos electrónicos
+# @app.post("/email/")
+# async def envia(email: EmailSchema, background_tasks: BackgroundTasks) -> JSONResponse:
+#     html = f"""<p>{email.cuerpo}</p>"""
+
+#     message = MessageSchema(
+#         subject="Notificación",
+#         recipients=[email.email],
+#         body=html,
+#         subtype=MessageType.html
+#     )
+
+#     fm = FastMail(conf)
+#     background_tasks.add_task(fm.send_message, message)
+#     return JSONResponse(status_code=200, content={"message": "Correo enviado"})

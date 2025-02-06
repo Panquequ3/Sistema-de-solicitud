@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Notificacion from "./Notificacion";
 
 // Componente que despliega un modal (pop up) 
 // para ingresar el justificativo al denegar una solicitud
@@ -10,12 +11,17 @@ const Justificacion = ({
     setModalAbierto,
     id_solicitud,
     actualizar,
+    destinatario
 }) => {
+  const motivo = `Hola ${destinatario.nombre}, Su solicitud fue DENEGADA: `;
+  const pie = `Mensaje generado automáticamente por el sistema, no responder.`;
+  const contacto = `Cualquier duda, contactar con: admin@test.cl`;
 
   const [justificacion, setJustificacion] = useState('');
   const [error, setError] = useState(false);
-    
-    // Función para manejar el envío del formulario (TEMPORAL)
+  const [enviarNotificacion, setEnviarNotificacion] = useState(false);
+  
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (justificacion === '') {
@@ -57,6 +63,8 @@ const Justificacion = ({
 
         actualizar(); // Actualizamos la lista de solicitudes
 
+        setEnviarNotificacion(true); // Notificamos por correo
+
     } catch (error) {
         console.error("Error:", error);
         return null;
@@ -94,6 +102,9 @@ const Justificacion = ({
           </div>
         </div>
       )}
+      {enviarNotificacion && 
+      <Notificacion destinatario={destinatario.email} 
+      cuerpo={`${motivo} <br><br> ${justificacion} <br><br>${contacto}<br><br>${pie}`} />}
     </div>
   );
 };

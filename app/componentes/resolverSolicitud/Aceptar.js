@@ -3,7 +3,11 @@ import { useState } from 'react';
 import Notificacion from "./Notificacion";
 // Componente: Botón que permite aceptar una solicitud pendiente
 
-const Aceptar = ({ id_solicitud, actualizar, destinatario, cuerpo }) => { 
+const Aceptar = ({ id_solicitud, actualizar, destinatario }) => { 
+    const motivo = `Hola ${destinatario.nombre}, Su solicitud fue ACEPTADA`;
+    const pie = `Mensaje generado automáticamente por el sistema, no responder.`;
+    const contacto = `Cualquier duda, contactar con: admin@test.cl`;
+
     const [enviarNotificacion, setEnviarNotificacion] = useState(false);
 
     const crearEstado = async () => {
@@ -74,7 +78,9 @@ const Aceptar = ({ id_solicitud, actualizar, destinatario, cuerpo }) => {
             <button className='accept-button' onClick={actualizaSolicitud} >
             Aceptar
             </button> 
-            {enviarNotificacion && <Notificacion destinatario={destinatario} cuerpo={cuerpo} />}
+            {enviarNotificacion && 
+            <Notificacion destinatario={destinatario.email} 
+            cuerpo={`${motivo} <br><br>  ${contacto} <br><br>${pie}`} />}
         </>
       );
 

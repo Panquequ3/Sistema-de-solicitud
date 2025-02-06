@@ -4,7 +4,7 @@ import Justificacion from "./Justificacion";
 
 // Componente: Botón que permite denegar una solicitud pendiente
 
-const Denegar = ({ id_solicitud, actualizar }) => { 
+const Denegar = ({ id_solicitud, actualizar, destinatario }) => { 
     const [modalAbierto, setModalAbierto] = useState(false);
     
 
@@ -79,6 +79,7 @@ const Denegar = ({ id_solicitud, actualizar }) => {
             setModalAbierto={setModalAbierto}
             id_solicitud={id_solicitud}
             actualizar = {actualizar}
+            destinatario={destinatario}
             />}
         </div>
       );

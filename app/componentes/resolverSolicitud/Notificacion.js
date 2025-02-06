@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 const Notificacion = ({ destinatario, cuerpo }) => { 
-    const [enviado, setEnviado] = useState(false);
+    const enviandoRef = useRef(false); // UdeRef, para no provocar otra renderización 
 
     const envia = async () => {
-        if (enviado) return; 
+        if (enviandoRef.current) return;
+
+        enviandoRef.current = true;
         
         try {
             const response = await fetch('http://localhost:8000/email/', {
@@ -21,9 +23,10 @@ const Notificacion = ({ destinatario, cuerpo }) => {
 
             const data = await response.json();
             console.log("Correo enviado:", data.message);
-            setEnviado(true); // Marcar como enviado
+            
         } catch (error) {
             console.error("Error enviando el correo:", error);
+            enviandoRef.current = false; // Reseteamos en caso de error
         }
     }
 

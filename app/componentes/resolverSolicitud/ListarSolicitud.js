@@ -131,10 +131,11 @@ const ListarSolicitud = () => {
                   <div className='approval-buttons'>
                     <Aceptar id_solicitud = {event.id_solicitud} 
                             actualizar = {obtenerSolicitudes}
-                            destinatario={event.email}
-                            cuerpo="Su solicitud fue aceptada"
+                            destinatario={{email: event.email, nombre: event.title}}
                             />
-                    <Denegar id_solicitud={event.id_solicitud} actualizar = {obtenerSolicitudes}/>
+                    <Denegar id_solicitud={event.id_solicitud} 
+                              actualizar = {obtenerSolicitudes}
+                              destinatario={{email: event.email, nombre: event.title}}/>
                   </div>
                 ) : (
                   <span>

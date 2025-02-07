@@ -5,7 +5,6 @@ import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import ModalSolicitud from './pop-up/ModalSolicitud';
-import { obtenerSolicitudes } from './api'; // Importa la función de fetch
 
 // Componente que renderiza el calendario con las reservas del estudio
 

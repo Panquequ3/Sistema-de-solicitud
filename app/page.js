@@ -8,7 +8,7 @@ export default function Home() {
         <img src="/assets/acustica.png" alt="Acustica" className='icon' />
         <div>
           <h1>Calendario</h1>
-          <h2>¡Bienvenido! Seleccione una fecha para visualizar o solicitar el estudio de grabación.</h2> 
+          <h2>¡Bienvenido! Seleccione una fecha para ver o solicitar una reserva del estudio de grabación.</h2> 
         </div>
         <IndicadorColores/>
       </div>

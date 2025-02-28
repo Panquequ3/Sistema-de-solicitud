@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 
 const Notificacion = ({ destinatario, cuerpo }) => { 
-    const enviandoRef = useRef(false); // UdeRef, para no provocar otra renderización 
+    const enviandoRef = useRef(false); // UseRef, para no provocar otra renderización 
 
     const envia = async () => {
         if (enviandoRef.current) return;
 
         enviandoRef.current = true;
-        
+        console.log("Entre a notificar");
         try {
             const response = await fetch('http://localhost:8000/email/', {
                 method: 'POST',

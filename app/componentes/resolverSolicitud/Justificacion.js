@@ -10,7 +10,6 @@ const Justificacion = ({
     modalAbierto,
     setModalAbierto,
     id_solicitud,
-    actualizar,
     destinatario
 }) => {
   const motivo = `Hola ${destinatario.nombre}, Su solicitud fue DENEGADA: `;
@@ -61,7 +60,7 @@ const Justificacion = ({
         const data = await response.json();
         console.log("Justificación guardada:", data); // Log de depuración
 
-        actualizar(); // Actualizamos la lista de solicitudes
+        // Actualizamos la lista de solicitudes
 
         setEnviarNotificacion(true); // Notificamos por correo
 

@@ -3,7 +3,7 @@
 // Componente modal (pop up) que despliega la interfaz de solicitar
 // una reserva del estudio
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
@@ -18,17 +18,22 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import 'dayjs/locale/es';
+
+import { SolicitudesContext } from "@/app/context/SolicitudesContext";
+
 
 
 const HacerSolicitud = ({
     solicitudAbierto,
-    setSolicitudAbierto,
-    actualizar,
+    setSolicitudAbierto
 }) => {
+    const { solicitudes, obtenerSolicitudes } = useContext(SolicitudesContext);
+
     // ESTADOS PARA MANEJAR LA INFO //
+    const [confirmacionAbierto, setConfirmacionAbierto] = useState(false)
     const [nombre, setNombre] = useState('')
     const [apellido, setApellido] = useState('')
     const [email, setEmail] = useState('')
@@ -204,7 +209,7 @@ const HacerSolicitud = ({
             })   
         }
 
-        if (!horaInicio) {
+        if (!horaInicio || horaInicio > horaFin) {
             valido = false;
             setHoraIniError({
                 error: true,
@@ -217,7 +222,7 @@ const HacerSolicitud = ({
             })   
         }
 
-        if (!horaFin) {
+        if (!horaFin || horaInicio > horaFin) {
             valido = false;
             setHoraFinError({
                 error: true,
@@ -249,7 +254,6 @@ const HacerSolicitud = ({
     const sendRequest = async () => {
 
         if (!validarCampos()) {
-            alert("hubo un error");
             return;
         }
         try {
@@ -292,18 +296,25 @@ const HacerSolicitud = ({
 
             const data = await response.json();
 
-            actualizar();
+            await obtenerSolicitudes(); // Actualizamos
+            // actualizar();
 
             console.log("Solicitud creada:", data);
+
         } catch (error) {
             console.error("Error:", error);
         }
+
+        // setConfirmacionAbierto(true);
         setSolicitudAbierto(false);
+        
     };
 
     // Función que maneja que el modal se cierre
     const handleClose = () => {
         setSolicitudAbierto(false);
+        setConfirmacionAbierto(true);
+        console.log("confirmacion truee");
     };
 
     // Función que maneja que al hacer click fuera del modal, este se cierre
@@ -318,7 +329,7 @@ const HacerSolicitud = ({
       {solicitudAbierto && (
         <div className="modal-overlay" onClick={handleOverlayClick}>
           <div className="application-content">
-            <header className="modal-header">
+            <div className="modal-header">
                 <h1 className="headerApplication">
                     Por favor, ingrese los siguientes datos para completar su solicitud:
                 </h1>
@@ -331,7 +342,7 @@ const HacerSolicitud = ({
                 >
                     <CloseIcon />
                 </IconButton>
-            </header>
+            </div>
 
             <LocalizationProvider adapterLocale="es" dateAdapter={AdapterDayjs}>
             <Box component = "form" sx={{py: 0, width: '100%'}}>
@@ -342,7 +353,7 @@ const HacerSolicitud = ({
 
                 <ListItem>
                     <FormControl error={fechaError.error}>
-                        <DatePicker 
+                        <DesktopDatePicker 
                             className="input-field" 
                             placeholder="Ingrese la fecha" 
                             value={fecha}
@@ -360,7 +371,7 @@ const HacerSolicitud = ({
                     <div className="form-input">
                         <FormControl error={horaIniError.error}>
                             <FormLabel> Ingrese la hora de inicio *</FormLabel>
-                            <TimePicker  
+                            <DesktopTimePicker  
                                         className="input-field"
                                         required
                                         value={horaInicio}
@@ -369,7 +380,7 @@ const HacerSolicitud = ({
                         </FormControl>
                         <FormControl error={horaFinError.error}>
                             <FormLabel> Ingrese la hora de fin *</FormLabel>
-                            <TimePicker 
+                            <DesktopTimePicker 
                                         className="input-field" 
                                         required
                                         value={horaFin}
@@ -430,7 +441,7 @@ const HacerSolicitud = ({
                             id="email"
                             type="email"
                             name="email"
-                            placeholder="tu@email.com"
+                            placeholder="Ingrese su correo institucional"
                             required
                             variant="outlined"
                             error={emailError.error}
@@ -444,7 +455,9 @@ const HacerSolicitud = ({
                 <Divider textAlign="left" component="li" className="divider-style">
                     Descripción
                 </Divider>
-
+                <p style={{marginRight: "10px",marginLeft:"10px", color:"rgb(14, 28, 27)"}}> 
+                    Por favor, especifique qué personas ingresarán al estudio y el equipamiento que se utilizará.
+                </p>
                 <ListItem>
                     <FormControl error={descError.error} fullWidth>
                         <textarea
@@ -468,7 +481,9 @@ const HacerSolicitud = ({
           </div>
         </div>
       )}
+        
     </div>
+
   );
 };
 

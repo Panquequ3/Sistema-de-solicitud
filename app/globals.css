@@ -15,12 +15,13 @@ body {
 .header {
   display: flex;
   align-items: left;
-  /* background-color: #f1f9ff; */
   font-size: 30px; 
   font-weight: bold; 
   color: #452c20;
   text-align: left; 
-  margin-top: 5px; 
+  margin-top: 10px; 
+  margin-bottom: 10px;
+  margin-left: 40px;
   padding-left: 80px;
   gap: 1rem;
 }
@@ -43,7 +44,7 @@ body {
 
 .indicador {
   margin-Top: 40px;
-  margin-Left: 300px;
+  margin-Left: 210px;
 }
 
 .icon {
@@ -59,8 +60,7 @@ body {
 }
 
 .fc-event {
-  /* background-color: #48CFCB; /* Color de fondo */
-  color: #ffffff; /* Color del texto */
+  color: #000000; /* Color del texto */
   border: none; /* Quita los bordes */
   border-radius: 5px; /* Bordes redondeados */
   padding: 2px 5px; /* Espaciado interno */
@@ -78,9 +78,9 @@ body {
 
 .fc .fc-prev-button, 
 .fc .fc-next-button {
-  background-color: #a7c146; /* Cambia #007bff al color de fondo que desees */
-  color: #ffffff; /* Cambia #ffffff al color del texto que desees */
-  border: none; /* Opcional: Eliminar el borde */
+  background-color: #a7c146;
+  color: #ffffff; 
+  border: none;
 }
 .fc .fc-prev-button:hover, 
 .fc .fc-next-button:hover {
@@ -132,6 +132,7 @@ body {
   border-radius: 10px;
   background-color: #ffffff3f;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+  margin-bottom: 50px;
 }
 
 /* Modal de ver las reservas del estudio */
@@ -157,12 +158,17 @@ body {
   z-index: 60;
   animation: pop-up 0.4s;
   min-width: 300px;
-  max-width: 1000px;
   min-height: 100px;
-  max-height: 1000px;
-  overflow: auto; /* Permite el desplazamiento si el contenido excede el tamaño máximo */
+  max-height: 600px;
+  overflow-y: auto; /* Permite el desplazamiento si el contenido excede el tamaño máximo */
 }
-
+.alert {
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  z-index: 60;
+}
 @keyframes pop-up {
   0% {
     transform: scale(0);
@@ -195,7 +201,11 @@ body {
   border: none;
   cursor: pointer;
 }
-
+.application-list {
+  min-height: 100px;
+  max-height: 400px;
+  overflow-y: auto;
+}
 .close-button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
@@ -218,7 +228,6 @@ body {
 
 .application {
   font-size: 15px; /* Tamaño de fuente */
-  /* font-weight: bold; Peso de la fuente */
   color: #1f2626; /* Color del texto */
   text-align: left; /* Alineación del texto */
   margin-top: 20px; 
@@ -313,10 +322,18 @@ body {
 
 /* Interfaz visible por administrador  */
 
+
 .page-title {
-  color: #2c3e50; /* Color del texto */
+  color: #819636;;
   font-size: 2rem; /* Tamaño de la fuente */
   text-align: center; /* Centra el texto */
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  font-weight: normal;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .listApplication {
@@ -349,7 +366,7 @@ body {
 .accept-button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  background-color: #05a3a3;
+  background-color: #60ba39;
   color: #ffffff;
   font-size: 14px;
   border-radius: 0.25rem;
@@ -360,7 +377,7 @@ body {
 .deny-button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  background-color: #ff9442;
+  background-color: #df6a68;
   color: #ffffff;
   font-size: 14px;
   border-radius: 0.25rem;
@@ -369,13 +386,13 @@ body {
 }
 
 .text-area {
-    width: 337px;
-    height: 128px;
-    background: "white";
-    color: "black";
-    border-color: "gray";
-    padding: 10px; 
-    border-radius: 10px;
+  width: 337px;
+  height: 128px;
+  background: "white";
+  color: "black";
+  border-color: "gray";
+  padding: 10px; 
+  border-radius: 10px;
 }
 
 .desc-Error {
@@ -396,12 +413,18 @@ body {
 .table-header th {
   color: #f4ffff;
   font-weight: bold;
-  background-color: #2c3e50;
+  background-color: #a7c146;
 }
 
 .modal-header {
   display: flex;
   justify-content: flex-end;
+}
+
+.filter-div {
+  display: flex;
+  align-items: left;
+  gap: 1rem;
 }
 
 .filter-button .MuiToggleButton-root {
@@ -411,11 +434,12 @@ body {
 
 /* Cuando está seleccionado  */
 .filter-button .Mui-selected {
-  background-color: #2c3e50; 
+  background-color: #a7c146; 
   color: #ffffff; 
 }
 
 .filter-button {
+  height: 50px;
   width: 100%; 
   max-width: 400px; /* Ancho máximo del grupo de botones */
 }
@@ -423,6 +447,15 @@ body {
 /* Al pasar el cursor sobre el botón */
 .filter-button .MuiToggleButton-root:hover {
   background-color: #989ab92a;
+}
+
+.custom-dialog-overlay .MuiBackdrop-root {
+  background-color: rgba(23, 38, 70, 0.5); /* Cambia el color y la opacidad del fondo */
+}
+
+
+.custom-dialog .MuiDialog-paper {
+  background-color: #F6F8F7;
 }
 
 /* INICIO SESION */

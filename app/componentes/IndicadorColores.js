@@ -6,7 +6,7 @@ const divStyle = { display: "flex", alignItems: "center", gap: "10px" };
 
 const IndicadorColores = () => {
   return (
-    <div className='indicador' style={{marginTop:"40px", marginLeft: "300px"}}>
+    <div className='indicador'>
 
         <div style={divStyle}>
             <div style={{ width: 20, height: 20, backgroundColor: '#92db56', borderRadius: '5px', marginBottom:"5px" }}></div>

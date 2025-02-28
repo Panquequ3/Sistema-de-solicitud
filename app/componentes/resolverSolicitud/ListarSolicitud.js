@@ -12,7 +12,9 @@ import Denegar from './Denegar';
 import Descripcion from './Descripcion';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+
+import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
 // Componente que lista todas las solicitudes para ser visualizadas y resueltas
 // por el administrador
@@ -22,16 +24,10 @@ const ListarSolicitud = () => {
   const [descripcion, setDescripcion] = useState(null);
   const [eventos, setEventos] = useState([]); // Ejemplos temporales
   const [filtro, setFiltro] = useState('');
+  const { solicitudes, obtenerSolicitudes } = useContext(SolicitudesContext);
 
-  const obtenerSolicitudes = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/solicitudesInfo/');
-      if (!response.ok) {
-        throw new Error('Fallo al obtener solicitudes');
-      }
-      const data = await response.json();
-      
-      const evento = data
+  const filtra = async () => { 
+    const evento = solicitudes
       .filter(solicitud => filtro === '' || solicitud.estado === filtro) // Filtrar por estado
       .map((solicitud) => {
         return {
@@ -57,16 +53,18 @@ const ListarSolicitud = () => {
         // Si ninguno ha sido resuelto ordenamos por id, de menor (más antiguo) a mayor (más reciente)
         return a.id_solicitud - b.id_solicitud;
         });
-      
-      setEventos(evento);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
+
+        setEventos(evento);
+  }
+
   
   useEffect(() => {
     obtenerSolicitudes();
-  }, [filtro]);
+  }, []);
+
+  useEffect(() => {
+    filtra();
+  }, [solicitudes, filtro]);
 
   const handleDescClick = (desc) => {
     setDescripcion(desc);
@@ -82,6 +80,7 @@ const ListarSolicitud = () => {
 
   return (
     <div>
+      <div className='filter-div'>
       <ToggleButtonGroup
         color="default"
         value={filtro}
@@ -94,7 +93,8 @@ const ListarSolicitud = () => {
         <ToggleButton value="aceptado">Aceptados</ToggleButton>
         <ToggleButton value="denegado">Denegados</ToggleButton>
       </ToggleButtonGroup>
-
+      <h4 className="page-subtitle"> Nota: Las solicitudes pendientes están ordenadas de la más antigua a la más reciente.</h4>
+      </div>
       <TableContainer component={Paper} className="table-container">
         <Table sx={{ minWidth: 650 }}>
           <TableHead className="table-header">
@@ -130,11 +130,11 @@ const ListarSolicitud = () => {
                 {(event.status === "pendiente") ? (
                   <div className='approval-buttons'>
                     <Aceptar id_solicitud = {event.id_solicitud} 
-                            actualizar = {obtenerSolicitudes}
+                            // actualizar = {obtenerSolicitudes}
                             destinatario={{email: event.email, nombre: event.title}}
                             />
                     <Denegar id_solicitud={event.id_solicitud} 
-                              actualizar = {obtenerSolicitudes}
+                              // actualizar = {obtenerSolicitudes}
                               destinatario={{email: event.email, nombre: event.title}}/>
                   </div>
                 ) : (
@@ -159,3 +159,44 @@ const ListarSolicitud = () => {
 };
 
 export default ListarSolicitud;
+
+  // const obtenerSolicitudes = async () => {
+  //   try {
+  //     const response = await fetch('http://localhost:8000/solicitudesInfo/');
+  //     if (!response.ok) {
+  //       throw new Error('Fallo al obtener solicitudes');
+  //     }
+  //     const data = await response.json();
+      
+  //     const evento = data
+  //     .filter(solicitud => filtro === '' || solicitud.estado === filtro) // Filtrar por estado
+  //     .map((solicitud) => {
+  //       return {
+  //         title: solicitud.nombre_estudiante,
+  //         email: solicitud.email,
+  //         start: solicitud.fecha,
+  //         desc: solicitud.descripcion,
+  //         startTime: solicitud.hora_inicio.slice(0,5), // Obtenemos el string que nos interesa
+  //         endTime: solicitud.hora_fin.slice(0,5), // o sea, solo el HH:MM
+  //         id_solicitud: solicitud.id_solicitud,
+  //         status: solicitud.estado,
+  //       };
+  //     }).sort((a, b) => {
+  //       // Si el segundo elemento (b) ya fue resuelto, entonces el primero (a) debe ir antes
+  //       if (b.status !== "pendiente" && a.status === "pendiente" ) return -1; 
+
+  //       // Si el segundo elemento (b) no ha sido resuelto, entonces el primero (a) debe ir después
+  //       if (b.status === "pendiente" && a.status !== "pendiente" ) return 1; 
+
+  //       // Si ya fueron resueltos, da igual el orden
+  //       if (b.status !== "pendiente" && a.status !== "pendiente") return 0; 
+
+  //       // Si ninguno ha sido resuelto ordenamos por id, de menor (más antiguo) a mayor (más reciente)
+  //       return a.id_solicitud - b.id_solicitud;
+  //       });
+      
+  //     setEventos(evento);
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };

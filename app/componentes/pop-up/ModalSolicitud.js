@@ -11,8 +11,7 @@ const ModalSolicitud = ({
     modalAbierto,
     setModalAbierto,
     fechaSeleccionada,
-    events,
-    actualizar,
+    events
 }) => {
 
   const [solicitudAbierto, setSolicitudAbierto] = useState(false);
@@ -43,26 +42,28 @@ const ModalSolicitud = ({
       {modalAbierto && (
         <div className="modal-overlay" onClick={handleOverlayClick}>
           <div className="modal-content">
-            <div className="modal-header">
+            <div className="modal-header" style={{ position: "sticky", top: "0", backgroundColor: "#F6F8F7"}}>
               <h2 className="header-title">¿Desea hacer una solicitud? </h2>
               <button className="application-button" onClick={handleApplication} > 
                 Hacer una solicitud 
               </button>
             </div>
-                <h4 className="subtitle">Reservas del estudio para el día {fechaSeleccionada}</h4>
+            <h4 className="subtitle">Reservas del estudio para el día {fechaSeleccionada}</h4>
+            <div className="application-list">
                 <ul>
                   {/* Verifica que existan eventos, de existir entonces renderiza el componente */}
                   { eventos.length > 0 ? (
                   eventos.map((event, index) => (
-                    <div className="application" key={index}>{event.title} - {event.time}</div>
+                    <div style={{ backgroundColor: event.color}} className="application" key={index}>{event.title} - {event.time}</div>
                   )) 
                 ) : (
                   <li>No hay reservas para esta fecha.</li>
                 )}
                 </ul>
-            <button onClick={handleClose} className="close-button">
-              Cerrar
-            </button>
+              </div>
+              <button onClick={handleClose} className="close-button">
+                Cerrar
+              </button>
           </div>
         </div>
       )}
@@ -70,7 +71,6 @@ const ModalSolicitud = ({
         <HacerSolicitud
           solicitudAbierto={solicitudAbierto}
           setSolicitudAbierto={setSolicitudAbierto}
-          actualizar={actualizar}
         />
       )}
     </div>

@@ -8,11 +8,12 @@ from schemas import ( EstudianteBase, EstudianteCreate, EstudianteResponse,
     SolicitudBase, SolicitudCreate, SolicitudUpdate, SolicitudResponse, SolicitudCompletaResponse,
     JustificacionBase, JustificacionCreate, JustificacionResponse,
     EtapaBase, EtapaCreate, EtapaResponse, LoginRequest, EmailSchema )
-from sqlalchemy import and_
+from sqlalchemy import between, or_, func
 from fastapi.middleware.cors import CORSMiddleware
 from passlib.context import CryptContext
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType 
 from starlette.responses import JSONResponse
+from datetime import datetime
 from dotenv import load_dotenv
 import os
 
@@ -90,6 +91,82 @@ def obtener_solicitudes_con_estudiantes(db: Session = Depends(get_db)):
             solicitudes_con_estudiantes.append(solicitud_data)
     return solicitudes_con_estudiantes
 
+@app.get("/solicitudesPorNombre/{nombre}", response_model=List[SolicitudCompletaResponse])
+def obtener_solicitudes_por_nombre(nombre: str, db: Session = Depends(get_db)):
+    solicitudes = db.query(models.Solicitud).join(models.Estudiante).filter(
+        or_(
+            func.lower(models.Estudiante.nombre).like(f"%{nombre}%"),
+            func.lower(models.Estudiante.apellido).like(f"%{nombre}%")
+        )
+    ).all()
+    solicitudes_por_nombre = []
+    for solicitud in solicitudes: # Recorremos todas las solicitudes
+        estudiante = db.query(models.Estudiante).filter(models.Estudiante.id_estudiante == solicitud.id_estudiante).first()
+        etapa = db.query(models.Etapa).filter(models.Etapa.id_estado == solicitud.id_estado).first()
+        if estudiante:
+            solicitud_data = {
+                "id_solicitud": solicitud.id_solicitud,
+                "fecha": solicitud.fecha,
+                "hora_inicio": solicitud.hora_inicio,
+                "hora_fin": solicitud.hora_fin,
+                "estado": etapa.estado,
+                "id_estudiante": solicitud.id_estudiante,
+                "descripcion": solicitud.descripcion,
+                "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
+                "email": estudiante.email
+            }
+            solicitudes_por_nombre.append(solicitud_data)
+    return solicitudes_por_nombre
+
+@app.get("/solicitudesPorEmail/{email}", response_model=List[SolicitudCompletaResponse])
+def obtener_solicitudes_por_email(email: str, db: Session = Depends(get_db)):
+    solicitudes = db.query(models.Solicitud).join(models.Estudiante).filter(
+        or_((models.Estudiante.email).like(f"%{email}%"))
+    ).all()
+    solicitudes_por_email = []
+    for solicitud in solicitudes: # Recorremos todas las solicitudes
+        estudiante = db.query(models.Estudiante).filter(models.Estudiante.id_estudiante == solicitud.id_estudiante).first()
+        etapa = db.query(models.Etapa).filter(models.Etapa.id_estado == solicitud.id_estado).first()
+        if estudiante:
+            solicitud_data = {
+                "id_solicitud": solicitud.id_solicitud,
+                "fecha": solicitud.fecha,
+                "hora_inicio": solicitud.hora_inicio,
+                "hora_fin": solicitud.hora_fin,
+                "estado": etapa.estado,
+                "id_estudiante": solicitud.id_estudiante,
+                "descripcion": solicitud.descripcion,
+                "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
+                "email": estudiante.email
+            }
+            solicitudes_por_email.append(solicitud_data)
+    return solicitudes_por_email
+
+@app.get("/solicitudesPorFecha/{fechaIni}/{fechaFin}", response_model=List[SolicitudCompletaResponse])
+def obtener_solicitudes_por_fecha(fechaIni: str, fechaFin: str, db: Session = Depends(get_db)):
+    fecha_ini = datetime.strptime(fechaIni, "%Y-%m-%d")
+    fecha_fin = datetime.strptime(fechaFin, "%Y-%m-%d")
+
+    solicitudes = db.query(models.Solicitud).filter( models.Solicitud.fecha.between(fecha_ini, fecha_fin)).all()
+
+    solicitudes_por_fecha = []
+    for solicitud in solicitudes: # Recorremos todas las solicitudes
+        estudiante = db.query(models.Estudiante).filter(models.Estudiante.id_estudiante == solicitud.id_estudiante).first()
+        etapa = db.query(models.Etapa).filter(models.Etapa.id_estado == solicitud.id_estado).first()
+        if estudiante:
+            solicitud_data = {
+                "id_solicitud": solicitud.id_solicitud,
+                "fecha": solicitud.fecha,
+                "hora_inicio": solicitud.hora_inicio,
+                "hora_fin": solicitud.hora_fin,
+                "estado": etapa.estado,
+                "id_estudiante": solicitud.id_estudiante,
+                "descripcion": solicitud.descripcion,
+                "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
+                "email": estudiante.email
+            }
+            solicitudes_por_fecha.append(solicitud_data)
+    return solicitudes_por_fecha
 
 # Ruta PUT para actualizar una solicitud existente
 @app.put("/solicitudes/{solicitud_id}", response_model=SolicitudResponse)

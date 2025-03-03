@@ -282,6 +282,13 @@ body {
   gap: 25px;
 }
 
+.input-date .MuiOutlinedInput-root {
+  margin-top: 8px;
+  height: 40px;
+  width: 150px;
+  max-height: 40px;
+}
+
 .input-field .MuiOutlinedInput-root,
 .email-field .MuiOutlinedInput-root {
   background-color: #ffffff;

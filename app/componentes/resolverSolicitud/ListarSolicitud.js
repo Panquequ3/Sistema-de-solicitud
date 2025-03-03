@@ -10,9 +10,11 @@ import Paper from '@mui/material/Paper'; // Solo para dar apariencia
 import Aceptar from './Aceptar';
 import Denegar from './Denegar';
 import Descripcion from './Descripcion';
+import Buscador from './Buscador';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { useEffect, useState, useContext } from 'react';
+
 
 import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
@@ -47,8 +49,12 @@ const ListarSolicitud = () => {
         // Si el segundo elemento (b) no ha sido resuelto, entonces el primero (a) debe ir después
         if (b.status === "pendiente" && a.status !== "pendiente" ) return 1; 
 
-        // Si ya fueron resueltos, da igual el orden
-        if (b.status !== "pendiente" && a.status !== "pendiente") return 0; 
+        // Si ya fueron resueltos, ordenamos por fecha
+        if (b.status !== "pendiente" && a.status !== "pendiente") {
+          const dateA = new Date(a.start);
+          const dateB = new Date(b.start);
+          return dateB - dateA;
+        }
 
         // Si ninguno ha sido resuelto ordenamos por id, de menor (más antiguo) a mayor (más reciente)
         return a.id_solicitud - b.id_solicitud;
@@ -65,6 +71,16 @@ const ListarSolicitud = () => {
   useEffect(() => {
     filtra();
   }, [solicitudes, filtro]);
+
+    // Intervalo para actualizar las solicitudes cada 5 minutos
+  useEffect(() => {
+      const intervalId = setInterval(() => {
+        obtenerSolicitudes();
+      }, 300000); // 5 minutos
+  
+      // Limpiar el intervalo cuando el componente se desmonte
+      return () => clearInterval(intervalId);
+  }, []);
 
   const handleDescClick = (desc) => {
     setDescripcion(desc);
@@ -84,7 +100,7 @@ const ListarSolicitud = () => {
       <ToggleButtonGroup
         color="default"
         value={filtro}
-        exclusive // Solo un botón puede ser seleccionado a la vez
+        exclusive // Solo una opción puede ser seleccionada a la vez
         onChange={handleFilter}
         className="filter-button"
       >
@@ -94,11 +110,13 @@ const ListarSolicitud = () => {
         <ToggleButton value="denegado">Denegados</ToggleButton>
       </ToggleButtonGroup>
       <h4 className="page-subtitle"> Nota: Las solicitudes pendientes están ordenadas de la más antigua a la más reciente.</h4>
+      <Buscador setEventos={setEventos}/>
       </div>
       <TableContainer component={Paper} className="table-container">
         <Table sx={{ minWidth: 650 }}>
           <TableHead className="table-header">
             <TableRow>
+            <TableCell>ID</TableCell>
               <TableCell>Estudiante</TableCell>
               <TableCell align="right">Email</TableCell>
               <TableCell align="right">Fecha</TableCell>
@@ -115,6 +133,9 @@ const ListarSolicitud = () => {
                 key={event.id_solicitud}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
+                <TableCell component="th" scope="row" >
+                  {event.id_solicitud}
+                </TableCell>
                 <TableCell component="th" scope="row" >
                   {event.title}
                 </TableCell>

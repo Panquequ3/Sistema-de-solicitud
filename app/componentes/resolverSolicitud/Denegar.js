@@ -1,6 +1,5 @@
 import "@/app/globals.css";
 import { useState } from "react";
-import Justificacion from "./Justificacion";
 
 import Confirmacion from "../Confirmacion";
 import Notificacion from "./Notificacion";
@@ -147,14 +146,6 @@ const handleSubmit = async (e) => {
             {enviarNotificacion && 
             <Notificacion destinatario={destinatario.email} 
             cuerpo={`${motivo} <br><br> ${justificacion} <br><br> ${contacto} <br><br>${pie}`} />}
-
-            {/* {modalAbierto && 
-            <Justificacion
-            abrirDialogo={modalAbierto}
-            setAbrirDialogo={setModalAbierto}
-            id_solicitud={id_solicitud}
-            destinatario={destinatario}
-            />} */}
 
             <Dialog
             open={modalAbierto}

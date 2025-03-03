@@ -2,6 +2,7 @@
 
 import { createContext, useState, useEffect  } from "react";
 
+
 export const SolicitudesContext = createContext();
 
 
@@ -10,8 +11,9 @@ export const SolicitudesProvider = ({ children }) => {
 
 
   const obtenerSolicitudes = async () => {
+
     try {
-      const response = await fetch('http://localhost:8000/solicitudesInfo/');
+      const response = await fetch(`http://localhost:8000/solicitudesInfo/`);
       if (!response.ok) {
         throw new Error('Fallo al obtener solicitudes');
       }

@@ -17,6 +17,7 @@ const Confirmacion = ({ contenido, abierto, setAbierto}) => {
     const handleClose =  async () => {
       setAbierto(false);
       obtenerSolicitudes(); // Actualizamos la lista de solicitudes
+      console.log("cerramos confirmacion");
     };
 
     return (
@@ -28,7 +29,7 @@ const Confirmacion = ({ contenido, abierto, setAbierto}) => {
             aria-describedby="alert-dialog-description"
             slotProps={{ backdrop: { style: { backgroundColor: "#17264A80" } } }}
             >
-
+                
                 <DialogTitle id="alert-dialog-title">
                 {"¡Listo!"}
                 </DialogTitle>

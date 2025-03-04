@@ -3,7 +3,7 @@
 // Componente modal (pop up) que despliega la interfaz de solicitar
 // una reserva del estudio
 
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
@@ -21,7 +21,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import 'dayjs/locale/es';
-import Confirmacion from "../Confirmacion";
 
 import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
@@ -31,7 +30,7 @@ const HacerSolicitud = ({
     solicitudAbierto,
     setSolicitudAbierto
 }) => {
-    const { solicitudes, obtenerSolicitudes } = useContext(SolicitudesContext)
+    const { obtenerSolicitudes, accionEnProgreso } = useContext(SolicitudesContext)
     const [exito, setExito] = useState(false) // ALmacena si se realizó con éxito la solicitud
     // ESTADOS PARA MANEJAR LA INFO //
     const [confirmacionAbierto, setConfirmacionAbierto] = useState(false)
@@ -314,13 +313,9 @@ const HacerSolicitud = ({
     // Función que maneja que el modal se cierre
     const handleClose = () => {
         setSolicitudAbierto(false);
+        accionEnProgreso.current = false;
     };
 
-    // useEffect(() => {
-    //     if (!confirmacionAbierto && exito) {
-    //         handleClose();
-    //     }
-    // }, [confirmacionAbierto, exito]);
 
     // Función que maneja que al hacer click fuera del modal, este se cierre
     const handleOverlayClick = (ev) => {
@@ -486,11 +481,6 @@ const HacerSolicitud = ({
           </div>
         </div>
       )}
-    {/* <Confirmacion 
-    contenido={`Se ha hecho una solicitud en nombre de ${nombre} ${apellido}, para el día ${fecha ? fecha.format('DD-MM-YYYY') : ''} a las ${horaInicio ? horaInicio.format('HH:mm') : ''} - ${horaFin ? horaFin.format('HH:mm') : ''} hrs. Se le notificará mediante un correo electrónico si su solicitud fue aceptada o denegada.`}
-    abierto={exito}
-    setAbierto={setExito}
-        /> */}
     </div>
 
   );

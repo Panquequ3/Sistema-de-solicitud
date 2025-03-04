@@ -1,5 +1,5 @@
 import "@/app/globals.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import Confirmacion from "../Confirmacion";
 import Notificacion from "./Notificacion";
@@ -9,16 +9,17 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
 // Componente: Botón que permite denegar una solicitud pendiente
 
 const Denegar = ({ id_solicitud, destinatario }) => { 
     const [enviarNotificacion, setEnviarNotificacion] = useState(false);
-    const [modalAbierto, setModalAbierto] = useState(false); // Para abrir el pop up de la justificacion
-    const [exito, setExito] = useState(false); // ALmacena si se realizó con éxito el aceptar la solicitud
+    const [abrirDialogo, setAbrirDialogo] = useState(false); // Para abrir el pop up de la justificacion
+    const [exito, setExito] = useState(false); // ALmacena si se realizó con éxito el denegar la solicitud
     const [justificacion, setJustificacion] = useState('');
     const [error, setError] = useState(false);
-
+    const { accionEnProgreso } = useContext(SolicitudesContext);
 
     const motivo = `Hola ${destinatario.nombre}, Su solicitud fue DENEGADA: `;
     const pie = `Mensaje generado automáticamente por el sistema, no responder.`;
@@ -26,7 +27,8 @@ const Denegar = ({ id_solicitud, destinatario }) => {
   
 
     const handleClose = () => {
-        setModalAbierto(false);
+        setAbrirDialogo(false);
+        accionEnProgreso.current = false;
       };
 
     // Funcion que setea el valor en la justificacion
@@ -34,6 +36,10 @@ const Denegar = ({ id_solicitud, destinatario }) => {
         setJustificacion(ev.target.value);
     };
 
+    const handleOpenDialog = () => {
+        setAbrirDialogo(true);
+        accionEnProgreso.current = true;
+    }
 
     // Se crea el estado denegado para asignarlo a la solicitud
     const crearEstado = async () => {
@@ -66,6 +72,7 @@ const Denegar = ({ id_solicitud, destinatario }) => {
         const id_estado = await crearEstado();
         if (!id_estado){
             alert("hubo un error! no se encontró el id");
+            accionEnProgreso.current = false;
             return;
         }
         
@@ -118,7 +125,7 @@ const Denegar = ({ id_solicitud, destinatario }) => {
 
 
         setEnviarNotificacion(true); // Notificamos por correo
-        setModalAbierto(false);
+        setAbrirDialogo(false);
         setExito(true);
 
         
@@ -140,7 +147,7 @@ const handleSubmit = async (e) => {
 };
     return (
         <div>
-            <button className='deny-button' onClick={(e) => setModalAbierto(true)} >
+            <button className='deny-button' onClick={handleOpenDialog} >
             Denegar
             </button> 
             {enviarNotificacion && 
@@ -148,7 +155,7 @@ const handleSubmit = async (e) => {
             cuerpo={`${motivo} <br><br> ${justificacion} <br><br> ${contacto} <br><br>${pie}`} />}
 
             <Dialog
-            open={modalAbierto}
+            open={abrirDialogo}
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
@@ -183,7 +190,6 @@ const handleSubmit = async (e) => {
             contenido={`Solicitud denegada con éxito`}
             abierto={exito}
             setAbierto={setExito}
-            // actualizar={actualizar}
              />
         </div>
       );

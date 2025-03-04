@@ -1,5 +1,5 @@
 import "@/app/globals.css";
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Notificacion from "./Notificacion";
 
 import Dialog from '@mui/material/Dialog';
@@ -9,6 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import Confirmacion from "../Confirmacion";
+import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
 // Componente: Botón que permite aceptar una solicitud pendiente
 
@@ -20,10 +21,17 @@ const Aceptar = ({ id_solicitud, destinatario }) => {
     const [enviarNotificacion, setEnviarNotificacion] = useState(false);
     const [abrirDialogo, setAbrirDialogo] = useState(false);
     const [exito, setExito] = useState(false); // ALmacena si se realizó con éxito el aceptar la solicitud
+    const { accionEnProgreso } = useContext(SolicitudesContext);
 
     const handleClose = () => {
-      setAbrirDialogo(false);
+        setAbrirDialogo(false);
+        accionEnProgreso.current = false;
     };
+
+    const handleOpenDialog = () => {
+        setAbrirDialogo(true);
+        accionEnProgreso.current = true;
+    }
 
     const crearEstado = async () => {
         try {
@@ -50,15 +58,15 @@ const Aceptar = ({ id_solicitud, destinatario }) => {
     };
 
     const actualizaSolicitud = async (e) => {
-
         e.preventDefault();
 
         const id_estado = await crearEstado();
         if (!id_estado){
             alert("hubo un error! no se encontró el id");
+            accionEnProgreso.current = false;
             return;
         }
-        console.log(id_solicitud);
+
         try {
             const response = await fetch(`http://localhost:8000/solicitudes/${id_solicitud}`, {
                 method: "PUT",
@@ -76,9 +84,6 @@ const Aceptar = ({ id_solicitud, destinatario }) => {
 
             const data = await response.json();
 
-
-            // actualizar(); // Actualizamos la lista de solicitudes
-
             setEnviarNotificacion(true); // Notificamos por correo
             setAbrirDialogo(false);
             setExito(true); // Se realizó con exito la acción
@@ -94,7 +99,7 @@ const Aceptar = ({ id_solicitud, destinatario }) => {
 
     return (
         <>
-            <button className='accept-button' onClick={(e) => setAbrirDialogo(true)} >
+            <button className='accept-button' onClick={handleOpenDialog} >
             Aceptar
             </button> 
             {enviarNotificacion && 
@@ -125,7 +130,6 @@ const Aceptar = ({ id_solicitud, destinatario }) => {
             contenido={`Se aceptó con éxito la solicitud de ${destinatario.nombre}`}
             abierto={exito}
             setAbierto={setExito}
-            // actualizar={actualizar}
              />
         </>
       );

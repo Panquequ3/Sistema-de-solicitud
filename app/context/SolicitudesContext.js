@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useState, useEffect  } from "react";
+import { createContext, useState, useRef, useEffect  } from "react";
 
 
 export const SolicitudesContext = createContext();
@@ -8,7 +8,7 @@ export const SolicitudesContext = createContext();
 
 export const SolicitudesProvider = ({ children }) => {
     const [solicitudes, setSolicitudes] = useState([]);
-
+    const accionEnProgreso = useRef(false);
 
   const obtenerSolicitudes = async () => {
 
@@ -24,13 +24,9 @@ export const SolicitudesProvider = ({ children }) => {
       console.error('Error:', error);
     }
   };
-  
-  useEffect(() => {
-    obtenerSolicitudes();
-  }, []);
 
   return (
-    <SolicitudesContext.Provider value={{ solicitudes, obtenerSolicitudes }}>
+    <SolicitudesContext.Provider value={{ solicitudes, obtenerSolicitudes, accionEnProgreso }}>
       {children}
     </SolicitudesContext.Provider>
   );

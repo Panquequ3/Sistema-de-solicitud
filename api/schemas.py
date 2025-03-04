@@ -32,6 +32,7 @@ class SolicitudBase(BaseModel):
     fecha: date
     id_estudiante: int
     descripcion: str
+    sala: str
 
 class SolicitudCreate(SolicitudBase):
     pass
@@ -56,6 +57,7 @@ class SolicitudCompletaResponse(BaseModel):
     descripcion: str
     nombre_estudiante: str
     email: str
+    sala: str
 
     class Config:
         from_attributes = True

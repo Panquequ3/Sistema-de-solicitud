@@ -5,19 +5,19 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useContext } from 'react';
+import { useEffect, useContext } from 'react';
 
 import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
 // Componente: Dialogo que indica que se realizó con exito una acción
 
 const Confirmacion = ({ contenido, abierto, setAbierto}) => { 
-    const { solicitudes, obtenerSolicitudes } = useContext(SolicitudesContext);
+    const { obtenerSolicitudes, accionEnProgreso } = useContext(SolicitudesContext);
 
     const handleClose =  async () => {
       setAbierto(false);
+      accionEnProgreso.current = false; // Ya no estamos realizando una acción
       obtenerSolicitudes(); // Actualizamos la lista de solicitudes
-      console.log("cerramos confirmacion");
     };
 
     return (

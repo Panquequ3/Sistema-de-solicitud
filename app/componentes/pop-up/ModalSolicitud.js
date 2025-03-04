@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import HacerSolicitud from "./HacerSolicitud";
-
+import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
 // Componente modal (pop up) que despliega la lista de solicitudes
 // y un boton que dirigue a la posibilidad de hacer una solicitud
@@ -15,6 +15,7 @@ const ModalSolicitud = ({
 }) => {
 
   const [solicitudAbierto, setSolicitudAbierto] = useState(false);
+  const { accionEnProgreso } = useContext(SolicitudesContext);
   // Si hay eventos, los filtramos
   const eventos = events.length > 0 ? 
                   events.filter(event => event.start === fechaSeleccionada) :
@@ -23,6 +24,7 @@ const ModalSolicitud = ({
   // Función que maneja que el modal se cierre
   const handleClose = () => {
     setModalAbierto(false);
+    accionEnProgreso.current = false;
   };
 
   // Función que maneja que al hacer click fuera del modal, este se cierre
@@ -31,9 +33,11 @@ const ModalSolicitud = ({
       handleClose();
     }
   };
+
   const handleApplication = () => {
     setModalAbierto(false);
     setSolicitudAbierto(true);
+    accionEnProgreso.current = true;
   };
 
 

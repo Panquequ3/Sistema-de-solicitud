@@ -26,7 +26,7 @@ const ListarSolicitud = () => {
   const [descripcion, setDescripcion] = useState(null);
   const [eventos, setEventos] = useState([]); // Ejemplos temporales
   const [filtro, setFiltro] = useState('');
-  const { solicitudes, obtenerSolicitudes } = useContext(SolicitudesContext);
+  const { solicitudes, obtenerSolicitudes, accionEnProgreso } = useContext(SolicitudesContext);
 
   const filtra = async () => { 
     const evento = solicitudes
@@ -75,8 +75,10 @@ const ListarSolicitud = () => {
     // Intervalo para actualizar las solicitudes cada 5 minutos
   useEffect(() => {
       const intervalId = setInterval(() => {
-        obtenerSolicitudes();
-      }, 300000); // 5 minutos
+        if (!accionEnProgreso.current){
+          obtenerSolicitudes();
+        }
+      }, 300000); // 5 minutos 300000
   
       // Limpiar el intervalo cuando el componente se desmonte
       return () => clearInterval(intervalId);
@@ -151,11 +153,9 @@ const ListarSolicitud = () => {
                 {(event.status === "pendiente") ? (
                   <div className='approval-buttons'>
                     <Aceptar id_solicitud = {event.id_solicitud} 
-                            // actualizar = {obtenerSolicitudes}
                             destinatario={{email: event.email, nombre: event.title}}
                             />
                     <Denegar id_solicitud={event.id_solicitud} 
-                              // actualizar = {obtenerSolicitudes}
                               destinatario={{email: event.email, nombre: event.title}}/>
                   </div>
                 ) : (
@@ -180,44 +180,3 @@ const ListarSolicitud = () => {
 };
 
 export default ListarSolicitud;
-
-  // const obtenerSolicitudes = async () => {
-  //   try {
-  //     const response = await fetch('http://localhost:8000/solicitudesInfo/');
-  //     if (!response.ok) {
-  //       throw new Error('Fallo al obtener solicitudes');
-  //     }
-  //     const data = await response.json();
-      
-  //     const evento = data
-  //     .filter(solicitud => filtro === '' || solicitud.estado === filtro) // Filtrar por estado
-  //     .map((solicitud) => {
-  //       return {
-  //         title: solicitud.nombre_estudiante,
-  //         email: solicitud.email,
-  //         start: solicitud.fecha,
-  //         desc: solicitud.descripcion,
-  //         startTime: solicitud.hora_inicio.slice(0,5), // Obtenemos el string que nos interesa
-  //         endTime: solicitud.hora_fin.slice(0,5), // o sea, solo el HH:MM
-  //         id_solicitud: solicitud.id_solicitud,
-  //         status: solicitud.estado,
-  //       };
-  //     }).sort((a, b) => {
-  //       // Si el segundo elemento (b) ya fue resuelto, entonces el primero (a) debe ir antes
-  //       if (b.status !== "pendiente" && a.status === "pendiente" ) return -1; 
-
-  //       // Si el segundo elemento (b) no ha sido resuelto, entonces el primero (a) debe ir después
-  //       if (b.status === "pendiente" && a.status !== "pendiente" ) return 1; 
-
-  //       // Si ya fueron resueltos, da igual el orden
-  //       if (b.status !== "pendiente" && a.status !== "pendiente") return 0; 
-
-  //       // Si ninguno ha sido resuelto ordenamos por id, de menor (más antiguo) a mayor (más reciente)
-  //       return a.id_solicitud - b.id_solicitud;
-  //       });
-      
-  //     setEventos(evento);
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // };

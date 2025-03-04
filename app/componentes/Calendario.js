@@ -10,11 +10,12 @@ import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 // Componente que renderiza el calendario con las reservas del estudio
 
 const Calendario = () => {
-  const calendarRef = useRef(null);
+  const calendarRef = useRef(null); // almacenará el calendario
+  const calendarInstanceRef = useRef(null); // almacenará una instancia del calendario
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [eventos, setEventos] = useState([]);
-  const { solicitudes, obtenerSolicitudes } = useContext(SolicitudesContext);
+  const { solicitudes, obtenerSolicitudes, accionEnProgreso } = useContext(SolicitudesContext);
 
   const filtra = async () => { 
     const evento = solicitudes
@@ -37,13 +38,26 @@ const Calendario = () => {
     obtenerSolicitudes();
   }, []);
 
+  // useEffect para obtener las solicitudes en un intervalo de tiempo
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (!accionEnProgreso.current){
+        obtenerSolicitudes();
+      }
+    }, 300000); // 5 minutos 300000
+
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(intervalId);
+}, []);
+
   useEffect(() => {
     filtra();
   }, [solicitudes]);
 
-  // useEffect para renderizar el calendario cuando los eventos cambian
-  useEffect(() => {
-    const calendar = new Calendar(calendarRef.current, {
+// useEffect para inicializar el calendario solo una vez
+useEffect(() => {
+  if (calendarRef.current) {
+    calendarInstanceRef.current = new Calendar(calendarRef.current, {
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
       dayMaxEventRows: true,
@@ -54,15 +68,25 @@ const Calendario = () => {
       dateClick: function(info) {
         setFechaSeleccionada(info.dateStr);
         setModalAbierto(true); // Abrir el modal al seleccionar una fecha
+        accionEnProgreso.current = true;
       },
       eventClick: function(info) {
         setFechaSeleccionada(info.event.startStr);
         setModalAbierto(true); // Abrir el modal al seleccionar un evento
+        accionEnProgreso.current = true;
       },
     });
-    calendar.render();
-  }, [eventos]);
+    calendarInstanceRef.current.render();
+  }
+}, []);
 
+  // useEffect para actualizar los eventos del calendario sin cambiar la vista
+  useEffect(() => {
+    if (calendarInstanceRef.current) {
+      calendarInstanceRef.current.removeAllEvents();
+      calendarInstanceRef.current.addEventSource(eventos);
+    }
+  }, [eventos]);
 
   return (
     <div>

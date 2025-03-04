@@ -7,7 +7,7 @@ const Notificacion = ({ destinatario, cuerpo }) => {
         if (enviandoRef.current) return;
 
         enviandoRef.current = true;
-        console.log("Entre a notificar");
+
         try {
             const response = await fetch('http://localhost:8000/email/', {
                 method: 'POST',
@@ -22,7 +22,7 @@ const Notificacion = ({ destinatario, cuerpo }) => {
             }
 
             const data = await response.json();
-            console.log("Correo enviado:", data.message);
+
             
         } catch (error) {
             console.error("Error enviando el correo:", error);

@@ -22,6 +22,10 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import 'dayjs/locale/es';
 
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import OutlinedInput from '@mui/material/OutlinedInput';
+
 import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
 
@@ -32,8 +36,8 @@ const HacerSolicitud = ({
 }) => {
     const { obtenerSolicitudes, accionEnProgreso } = useContext(SolicitudesContext)
     const [exito, setExito] = useState(false) // ALmacena si se realizó con éxito la solicitud
+
     // ESTADOS PARA MANEJAR LA INFO //
-    const [confirmacionAbierto, setConfirmacionAbierto] = useState(false)
     const [nombre, setNombre] = useState('')
     const [apellido, setApellido] = useState('')
     const [email, setEmail] = useState('')
@@ -41,6 +45,7 @@ const HacerSolicitud = ({
     const [horaInicio, setHoraInicio] = useState(null)
     const [horaFin, setHoraFin] = useState(null)
     const [descripcion, setDescripcion] = useState('')
+    const [sala, setSala] = useState('')
     // ESTADOS PARA MANEJAR ERROR //
     const [nombreError, setNombreError] = useState({
         error: false,
@@ -67,6 +72,10 @@ const HacerSolicitud = ({
         msj: "",
     })
     const [descError, setDescError] = useState({
+        error: false,
+        msj: "",
+    })
+    const [salaError, setSalaError] = useState({
         error: false,
         msj: "",
     })
@@ -127,8 +136,8 @@ const HacerSolicitud = ({
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    nombre: nombre,
-                    apellido: apellido,
+                    nombre: nombre.toUpperCase(),
+                    apellido: apellido.toUpperCase(),
                     email: email
                 }),
             });
@@ -150,6 +159,19 @@ const HacerSolicitud = ({
         // Expresión regular para validar el email, deberia de aceptar solo emails que contengan
         // uach despues del @, y así aceptar correos desde @alumnos.uach.cl hasta @inf.uach.cl en caso de
         const re = /^[a-zA-Z0-9._]+@[a-zA-Z0-9._]*\uach\.[a-zA-Z]{2,5}$/i;
+
+        if (!sala) {
+            valido = false;
+            setSalaError({
+                error: true,
+                msj: "Seleccione la sala",
+            })
+        } else {
+            setSalaError({
+                error: false,
+                msj: "",
+            })   
+        } 
 
         if (!nombre) {
             valido = false;
@@ -286,7 +308,8 @@ const HacerSolicitud = ({
                     hora_fin: horaFin ? horaFin.format('HH:mm') : null,
                     fecha: fecha ? fecha.format('YYYY-MM-DD') : null,
                     id_estudiante: idEstudiante,
-                    descripcion: descripcion
+                    descripcion: descripcion,
+                    sala: sala
                 }),
             });
 
@@ -451,6 +474,43 @@ const HacerSolicitud = ({
                         />
                     </FormControl>
                 </ListItem>
+
+                <Divider textAlign="left" component="li" className="divider-style">
+                    Seleccione la sala 
+                </Divider>
+
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small" error={salaError.error}>
+                    <Select
+                    displayEmpty
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    value={sala}
+                    label="Buscar por"
+                    input={<OutlinedInput />}
+                    onChange={(e) => setSala(e.target.value)}
+                    renderValue={(selected) => {
+                        if (selected === "") {
+                        return "Seleccionar"; 
+                        }
+                        return selected;
+                    }}
+                    sx={{
+                        backgroundColor: "#ffffff",
+                        borderRadius: "5px",
+                        height: "3rem",
+                        maxHeight: "3rem",
+                        width: "25ch",
+                        marginLeft: "10px"
+                        }}
+                    >
+                    <MenuItem disabled value="">
+                        <em>Buscar por: </em>
+                    </MenuItem>
+                    <MenuItem value="A">Sala A</MenuItem>
+                    <MenuItem value="B">Sala B</MenuItem>
+                    </Select>
+                    <FormHelperText>{salaError.msj}</FormHelperText>
+                </FormControl>
 
                 <Divider textAlign="left" component="li" className="divider-style">
                     Descripción

@@ -58,7 +58,10 @@ const ModalSolicitud = ({
                   {/* Verifica que existan eventos, de existir entonces renderiza el componente */}
                   { eventos.length > 0 ? (
                   eventos.map((event, index) => (
-                    <div style={{ backgroundColor: event.color}} className="application" key={index}>{event.title} - {event.time}</div>
+                    <div style={{ backgroundColor: event.color}} className="application" key={index}> 
+                      <p className='application-text'>{event.title} - Sala {event.sala}</p>
+                      <p className='application-text'>{event.time}</p>
+                    </div>
                   )) 
                 ) : (
                   <li>No hay reservas para esta fecha.</li>

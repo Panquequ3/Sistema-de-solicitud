@@ -26,9 +26,10 @@ const Calendario = () => {
           start: solicitud.fecha,
           time: `${solicitud.hora_inicio.slice(0,5)} - ${solicitud.hora_fin.slice(0,5)}`,
           color: (solicitud.estado === "aceptado" ? "#92db56" : "#6ccaee"),
+          sala: solicitud.sala,
           hora_inicio: solicitud.hora_inicio.slice(0,5) // Para comparar y ordenar los eventos
         };
-      }).sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio)); // Ordenamos lexicográficamente
+      }).sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio)); // Ordenamos lexicográficamente las horas de inicio
       
       setEventos(evento);
   }
@@ -104,29 +105,3 @@ useEffect(() => {
 };
 
 export default Calendario;
-
-  // const obtenerSolicitudes = async () => {
-  //   try {
-  //     const response = await fetch('http://localhost:8000/solicitudesInfo/');
-  //     if (!response.ok) {
-  //       throw new Error('Fallo al obtener solicitudes');
-  //     }
-  //     const data = await response.json();
-      
-  //     const evento = data
-  //     .filter(solicitud => solicitud.estado === "aceptado" || solicitud.estado === "pendiente")
-  //     .map((solicitud) => {
-  //       return {
-  //         title: solicitud.nombre_estudiante,
-  //         start: solicitud.fecha,
-  //         time: `${solicitud.hora_inicio.slice(0,5)} - ${solicitud.hora_fin.slice(0,5)}`,
-  //         color: (solicitud.estado === "aceptado" ? "#92db56" : "#6ccaee"),
-  //         hora_inicio: solicitud.hora_inicio.slice(0,5) // Para comparar y ordenar los eventos
-  //       };
-  //     }).sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio)); // Ordenamos lexicográficamente
-      
-  //     setEventos(evento);
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // };

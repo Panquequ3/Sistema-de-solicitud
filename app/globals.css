@@ -227,16 +227,23 @@ body {
 /* Modal de hacer solicitud */
 
 .application {
+  display:flex;
+  justify-content:space-between;
   font-size: 15px; /* Tamaño de fuente */
   color: #1f2626; /* Color del texto */
   text-align: left; /* Alineación del texto */
   margin-top: 20px; 
   margin-bottom: 20px; 
   margin-right: 30px; /* Para centrar el div */
-  padding: 10px; /* Relleno */
+  padding-left: 10px; 
+  padding-right: 10px; 
   background-color: #ffffff; /* Color de fondo */
   border-radius: 8px; /* Bordes redondeados */
   border: none;
+}
+
+.application-text {
+  margin-bottom: 10px;  
 }
 
 .application-content {

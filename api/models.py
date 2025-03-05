@@ -28,6 +28,7 @@ class Solicitud(Base):
     fecha = Column(Date)
     id_estudiante = Column(Integer, ForeignKey("estudiante.id_estudiante") )
     descripcion = Column(String)
+    sala = Column(String)
 
 # Tabla que almacena la justificación de por qué fue denegada la solicitud de un estudiante
 class Justificacion(Base):

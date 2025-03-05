@@ -68,28 +68,34 @@ def solicitud_por_id(solicitud_id: int, db: Session = Depends(get_db)):
 def obtener_solicitudes(db: Session = Depends(get_db)):
     return db.query(models.Solicitud).order_by(models.Solicitud.id_solicitud.desc()).all()
 
+
+
+def construir_solicitud_data(solicitud, estudiante, etapa):
+    return {
+        "id_solicitud": solicitud.id_solicitud,
+        "fecha": solicitud.fecha,
+        "hora_inicio": solicitud.hora_inicio,
+        "hora_fin": solicitud.hora_fin,
+        "estado": etapa.estado,
+        "id_estudiante": solicitud.id_estudiante,
+        "descripcion": solicitud.descripcion,
+        "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
+        "email": estudiante.email,
+        "sala": solicitud.sala 
+    }
+
 # Ruta GET para obtener todas las solicitudes con información del estudiante
 @app.get("/solicitudesInfo/", response_model=List[SolicitudCompletaResponse])
 def obtener_solicitudes_con_estudiantes(db: Session = Depends(get_db)):
     solicitudes = db.query(models.Solicitud).all() # Obtiene todas las solicitudes mediante una consulta para la tabla solicitud
-    solicitudes_con_estudiantes = []
+    solicitudes_con_estudiante = []
     for solicitud in solicitudes: # Recorremos todas las solicitudes
         estudiante = db.query(models.Estudiante).filter(models.Estudiante.id_estudiante == solicitud.id_estudiante).first()
         etapa = db.query(models.Etapa).filter(models.Etapa.id_estado == solicitud.id_estado).first()
         if estudiante:
-            solicitud_data = {
-                "id_solicitud": solicitud.id_solicitud,
-                "fecha": solicitud.fecha,
-                "hora_inicio": solicitud.hora_inicio,
-                "hora_fin": solicitud.hora_fin,
-                "estado": etapa.estado,
-                "id_estudiante": solicitud.id_estudiante,
-                "descripcion": solicitud.descripcion,
-                "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
-                "email": estudiante.email
-            }
-            solicitudes_con_estudiantes.append(solicitud_data)
-    return solicitudes_con_estudiantes
+            solicitud_data = construir_solicitud_data(solicitud, estudiante, etapa)
+            solicitudes_con_estudiante.append(solicitud_data)
+    return solicitudes_con_estudiante
 
 @app.get("/solicitudesPorNombre/{nombre}", response_model=List[SolicitudCompletaResponse])
 def obtener_solicitudes_por_nombre(nombre: str, db: Session = Depends(get_db)):
@@ -113,7 +119,8 @@ def obtener_solicitudes_por_nombre(nombre: str, db: Session = Depends(get_db)):
                 "id_estudiante": solicitud.id_estudiante,
                 "descripcion": solicitud.descripcion,
                 "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
-                "email": estudiante.email
+                "email": estudiante.email,
+                "sala": solicitud.sala 
             }
             solicitudes_por_nombre.append(solicitud_data)
     return solicitudes_por_nombre
@@ -137,7 +144,8 @@ def obtener_solicitudes_por_email(email: str, db: Session = Depends(get_db)):
                 "id_estudiante": solicitud.id_estudiante,
                 "descripcion": solicitud.descripcion,
                 "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
-                "email": estudiante.email
+                "email": estudiante.email,
+                "sala": solicitud.sala 
             }
             solicitudes_por_email.append(solicitud_data)
     return solicitudes_por_email
@@ -163,10 +171,13 @@ def obtener_solicitudes_por_fecha(fechaIni: str, fechaFin: str, db: Session = De
                 "id_estudiante": solicitud.id_estudiante,
                 "descripcion": solicitud.descripcion,
                 "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
-                "email": estudiante.email
+                "email": estudiante.email,
+                "sala": solicitud.sala 
             }
             solicitudes_por_fecha.append(solicitud_data)
     return solicitudes_por_fecha
+
+
 
 # Ruta PUT para actualizar una solicitud existente
 @app.put("/solicitudes/{solicitud_id}", response_model=SolicitudResponse)
@@ -190,19 +201,6 @@ def crear_estudiante(estudiante: EstudianteCreate, db: Session = Depends(get_db)
     db.commit()
     db.refresh(db_estudiante)
     return db_estudiante
-
-# @app.post("/estudiante/{email}", response_model=EstudianteResponse)
-# def obtiene_estudiante(estudiante: EstudianteCreate, email: str, db: Session = Depends(get_db)):
-#     # Consulta si el estudiante existe
-#     db_estudiante = db.query(models.Estudiante).filter(models.Estudiante.email == email).first() 
-#     # Si no existe, entonces lo crea
-#     if db_estudiante is None:
-#         db_estudiante = models.Estudiante(**estudiante.dict())
-#         db.add(db_estudiante)
-#         db.commit()
-#         db.refresh(db_estudiante)
-
-#     return db_estudiante # Retorna el estudiante
 
 @app.get("/estudiante/{email}", response_model=EstudianteResponse)
 def obtener_estudiante(email: str, db: Session = Depends(get_db)):
@@ -293,18 +291,4 @@ async def envia(email: EmailSchema) -> JSONResponse:
     fm = FastMail(conf)
     await fm.send_message(message)
     return JSONResponse(status_code=200, content={"message": "email has been sent"})
-# Endpoint para enviar correos electrónicos
-# @app.post("/email/")
-# async def envia(email: EmailSchema, background_tasks: BackgroundTasks) -> JSONResponse:
-#     html = f"""<p>{email.cuerpo}</p>"""
 
-#     message = MessageSchema(
-#         subject="Notificación",
-#         recipients=[email.email],
-#         body=html,
-#         subtype=MessageType.html
-#     )
-
-#     fm = FastMail(conf)
-#     background_tasks.add_task(fm.send_message, message)
-#     return JSONResponse(status_code=200, content={"message": "Correo enviado"})

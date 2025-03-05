@@ -41,6 +41,7 @@ const ListarSolicitud = () => {
           endTime: solicitud.hora_fin.slice(0,5), // o sea, solo el HH:MM
           id_solicitud: solicitud.id_solicitud,
           status: solicitud.estado,
+          sala: solicitud.sala
         };
       }).sort((a, b) => {
         // Si el segundo elemento (b) ya fue resuelto, entonces el primero (a) debe ir antes
@@ -121,6 +122,7 @@ const ListarSolicitud = () => {
             <TableCell>ID</TableCell>
               <TableCell>Estudiante</TableCell>
               <TableCell align="right">Email</TableCell>
+              <TableCell align="right">Sala</TableCell>
               <TableCell align="right">Fecha</TableCell>
               <TableCell align="right">Horario</TableCell>
               <TableCell align="right">Descripción</TableCell>
@@ -142,6 +144,7 @@ const ListarSolicitud = () => {
                   {event.title}
                 </TableCell>
                 <TableCell align="right">{event.email}</TableCell>
+                <TableCell align="right">Sala {event.sala}</TableCell>
                 <TableCell align="right">{event.start}</TableCell>
                 <TableCell align="right">{event.startTime} - {event.endTime}</TableCell>
                 <TableCell align="right">

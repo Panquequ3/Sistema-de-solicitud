@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session, joinedload
 from schemas import ( EstudianteBase, EstudianteCreate, EstudianteResponse,
     SolicitudBase, SolicitudCreate, SolicitudUpdate, SolicitudResponse, SolicitudCompletaResponse,
     JustificacionBase, JustificacionCreate, JustificacionResponse,
+    CondicionBase, CondicionCreate, CondicionResponse,
     EtapaBase, EtapaCreate, EtapaResponse, LoginRequest, EmailSchema )
 from sqlalchemy import between, or_, func
 from fastapi.middleware.cors import CORSMiddleware
@@ -110,18 +111,7 @@ def obtener_solicitudes_por_nombre(nombre: str, db: Session = Depends(get_db)):
         estudiante = db.query(models.Estudiante).filter(models.Estudiante.id_estudiante == solicitud.id_estudiante).first()
         etapa = db.query(models.Etapa).filter(models.Etapa.id_estado == solicitud.id_estado).first()
         if estudiante:
-            solicitud_data = {
-                "id_solicitud": solicitud.id_solicitud,
-                "fecha": solicitud.fecha,
-                "hora_inicio": solicitud.hora_inicio,
-                "hora_fin": solicitud.hora_fin,
-                "estado": etapa.estado,
-                "id_estudiante": solicitud.id_estudiante,
-                "descripcion": solicitud.descripcion,
-                "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
-                "email": estudiante.email,
-                "sala": solicitud.sala 
-            }
+            solicitud_data = construir_solicitud_data(solicitud, estudiante, etapa)
             solicitudes_por_nombre.append(solicitud_data)
     return solicitudes_por_nombre
 
@@ -135,18 +125,7 @@ def obtener_solicitudes_por_email(email: str, db: Session = Depends(get_db)):
         estudiante = db.query(models.Estudiante).filter(models.Estudiante.id_estudiante == solicitud.id_estudiante).first()
         etapa = db.query(models.Etapa).filter(models.Etapa.id_estado == solicitud.id_estado).first()
         if estudiante:
-            solicitud_data = {
-                "id_solicitud": solicitud.id_solicitud,
-                "fecha": solicitud.fecha,
-                "hora_inicio": solicitud.hora_inicio,
-                "hora_fin": solicitud.hora_fin,
-                "estado": etapa.estado,
-                "id_estudiante": solicitud.id_estudiante,
-                "descripcion": solicitud.descripcion,
-                "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
-                "email": estudiante.email,
-                "sala": solicitud.sala 
-            }
+            solicitud_data = construir_solicitud_data(solicitud, estudiante, etapa)
             solicitudes_por_email.append(solicitud_data)
     return solicitudes_por_email
 
@@ -162,21 +141,9 @@ def obtener_solicitudes_por_fecha(fechaIni: str, fechaFin: str, db: Session = De
         estudiante = db.query(models.Estudiante).filter(models.Estudiante.id_estudiante == solicitud.id_estudiante).first()
         etapa = db.query(models.Etapa).filter(models.Etapa.id_estado == solicitud.id_estado).first()
         if estudiante:
-            solicitud_data = {
-                "id_solicitud": solicitud.id_solicitud,
-                "fecha": solicitud.fecha,
-                "hora_inicio": solicitud.hora_inicio,
-                "hora_fin": solicitud.hora_fin,
-                "estado": etapa.estado,
-                "id_estudiante": solicitud.id_estudiante,
-                "descripcion": solicitud.descripcion,
-                "nombre_estudiante": f"{estudiante.nombre} {estudiante.apellido}",
-                "email": estudiante.email,
-                "sala": solicitud.sala 
-            }
+            solicitud_data = construir_solicitud_data(solicitud, estudiante, etapa)
             solicitudes_por_fecha.append(solicitud_data)
     return solicitudes_por_fecha
-
 
 
 # Ruta PUT para actualizar una solicitud existente
@@ -228,6 +195,7 @@ def obtener_estado(estado_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Estado no encontrado")
     return db_estado
 
+
 """ JUSTIFICACION """
 # Ruta POST para crear una justificacion
 @app.post("/justificacion/", response_model=JustificacionResponse)
@@ -245,6 +213,32 @@ def crear_justificacion(justificacion: JustificacionCreate, db: Session = Depend
     db.refresh(db_justificacion)
     
     return db_justificacion
+
+""" CONDICION """
+# Ruta POST para crear una justificacion
+@app.post("/condicion/", response_model=CondicionResponse)
+def crear_condicion(condicion: CondicionCreate, db: Session = Depends(get_db)):
+    # Crear una instancia del modelo Justificacion con los datos recibidos
+    db_condicion = models.Condicion(**condicion.dict())
+
+    # Agregar la justificación a la sesión de la base de datos
+    db.add(db_condicion)
+
+    # Confirmar la transacción
+    db.commit()
+
+    # Refrescar la instancia para obtener los datos actualizados de la base de datos
+    db.refresh(db_condicion)
+    
+    return db_condicion
+
+@app.get("/condicion/{solicitud_id}", response_model=CondicionResponse)
+def obtener_condicion(solicitud_id: int, db: Session = Depends(get_db)):
+    db_condicion = db.query(models.Condicion).filter(models.Condicion.id_solicitud == solicitud_id).first()
+    if db_condicion is None:
+        raise HTTPException(status_code=404, detail="Condición no encontrada")
+    return db_condicion
+
 
 """ AUTENTICACION """
 

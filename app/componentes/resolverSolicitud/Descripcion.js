@@ -30,7 +30,7 @@ const Descripcion = ({
     <div>
       {modalAbierto && (
         <div className="modal-overlay" onClick={handleOverlayClick}>
-          <div className="modal-content">
+          <div style={{ maxHeight: "700px", maxWidth:"550px" }} className="modal-content">
             <div style={{ textAlign: 'left', marginBottom: '10px' }}>
              Descripción
             </div>

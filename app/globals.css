@@ -43,7 +43,7 @@ body {
 }
 
 .indicador {
-  margin-Top: 40px;
+  margin-Top: 20px;
   margin-Left: 210px;
 }
 
@@ -60,7 +60,7 @@ body {
 }
 
 .fc-event {
-  color: #000000; /* Color del texto */
+   /* Color del texto */
   border: none; /* Quita los bordes */
   border-radius: 5px; /* Bordes redondeados */
   padding: 2px 5px; /* Espaciado interno */

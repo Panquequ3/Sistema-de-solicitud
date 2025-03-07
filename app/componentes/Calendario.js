@@ -19,15 +19,18 @@ const Calendario = () => {
 
   const filtra = async () => { 
     const evento = solicitudes
-      .filter(solicitud => solicitud.estado === "aceptado" || solicitud.estado === "pendiente")
+      .filter(solicitud => solicitud.estado !== "denegado")
       .map((solicitud) => {
         return {
           title: solicitud.nombre_estudiante,
           start: solicitud.fecha,
           time: `${solicitud.hora_inicio.slice(0,5)} - ${solicitud.hora_fin.slice(0,5)}`,
-          color: (solicitud.estado === "aceptado" ? "#92db56" : "#6ccaee"),
-          sala: solicitud.sala,
-          hora_inicio: solicitud.hora_inicio.slice(0,5) // Para comparar y ordenar los eventos
+          sala: solicitud.sala, 
+          hora_inicio: solicitud.hora_inicio.slice(0,5), // Para comparar y ordenar los eventos
+          status: solicitud.estado,
+          id_solicitud: solicitud.id_solicitud,
+          color: (solicitud.estado === "aceptado" ? "#92db56" : (solicitud.estado === "en revision" ? "#FFD951" : "#6ccaee" )),
+          textColor:" #000000"
         };
       }).sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio)); // Ordenamos lexicográficamente las horas de inicio
       

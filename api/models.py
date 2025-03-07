@@ -38,6 +38,15 @@ class Justificacion(Base):
     id_solicitud = Column(Integer, ForeignKey("solicitud.id_solicitud"))
     contenido = Column(String)
 
+# Tabla que almacena la condición para ser aceptada la solicitud
+class Condicion(Base):
+    __tablename__ = "condicion"
+
+    id_condicion = Column(Integer, primary_key = True, index = True, autoincrement=True)
+    id_solicitud = Column(Integer, ForeignKey("solicitud.id_solicitud"))
+    contenido = Column(String)
+    codigo = Column(String)
+
 # Tabla que almacena los datos del administrador (profesor)
 class Administrador(Base):
     __tablename__ = "administrador"

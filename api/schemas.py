@@ -78,7 +78,22 @@ class JustificacionResponse(JustificacionBase):
     class Config:
         from_attributes = True
 
+# Esquema Condicion (al aceptar una solicitud) #
+class CondicionBase(BaseModel):
+    id_solicitud: int
+    contenido: str 
+    codigo: str
 
+class CondicionCreate(CondicionBase):
+    pass
+
+class CondicionResponse(CondicionBase):
+    id_condicion: int
+    contenido: str
+    codigo: str
+
+    class Config:
+        from_attributes = True
 # Esquema estado #
 
 class EtapaBase(BaseModel):

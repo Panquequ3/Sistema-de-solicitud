@@ -122,7 +122,7 @@ const Buscador = ({setEventos}) => {
   }
 
   const validaFecha = () => {
-    alert("Validando");
+
     if (!fechaIni || !fechaFin) {
       setFechaError({
           error: true,

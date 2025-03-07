@@ -24,6 +24,7 @@
     "fullcalendar-scheduler": "^6.1.15",
     "next": "15.1.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "shortid": "^2.2.17"
   }
 }

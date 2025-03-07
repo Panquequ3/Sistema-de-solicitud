@@ -45,13 +45,23 @@ const ListarSolicitud = () => {
         };
       }).sort((a, b) => {
         // Si el segundo elemento (b) ya fue resuelto, entonces el primero (a) debe ir antes
-        if (b.status !== "pendiente" && a.status === "pendiente" ) return -1; 
+        if (b.status !== "pendiente" && b.status !== "en revision" && a.status === "pendiente" ) return -1; 
 
         // Si el segundo elemento (b) no ha sido resuelto, entonces el primero (a) debe ir después
-        if (b.status === "pendiente" && a.status !== "pendiente" ) return 1; 
+        if (b.status === "pendiente" && b.status !== "en revision" && a.status !== "pendiente" ) return 1; 
+
+
+        if (b.status !== "en revision" && a.status === "en revision" ) return -1; 
+
+        if (b.status === "en revision" && a.status !== "en revision" ) return 1; 
+
+
+        if (b.status !== "pendiente" && a.status === "en revision" ) return -1; 
+
+        if (b.status === "pendiente" && a.status !== "en revision" ) return 1; 
 
         // Si ya fueron resueltos, ordenamos por fecha
-        if (b.status !== "pendiente" && a.status !== "pendiente") {
+        if (b.status !== "pendiente" && b.status !== "en revision" && a.status !== "pendiente" && a.status !== "en revision") {
           const dateA = new Date(a.start);
           const dateB = new Date(b.start);
           return dateB - dateA;
@@ -126,6 +136,7 @@ const ListarSolicitud = () => {
               <TableCell align="right">Fecha</TableCell>
               <TableCell align="right">Horario</TableCell>
               <TableCell align="right">Descripción</TableCell>
+              <TableCell align="right">Estado</TableCell>
               <TableCell align="right">Resolver</TableCell>
             </TableRow>
           </TableHead>
@@ -151,19 +162,21 @@ const ListarSolicitud = () => {
                   <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => handleDescClick(event.desc)}>
                     ver descripción
                   </span>
-                  </TableCell>
+                </TableCell>
+                <TableCell align="right">{event.status}</TableCell>
                 <TableCell align="right">
-                {(event.status === "pendiente") ? (
+                {(event.status === "pendiente" || event.status === "en revision") ? (
                   <div className='approval-buttons'>
-                    <Aceptar id_solicitud = {event.id_solicitud} 
+                    <Aceptar id_solicitud={event.id_solicitud} 
                             destinatario={{email: event.email, nombre: event.title}}
+                            estado={event.status}
                             />
                     <Denegar id_solicitud={event.id_solicitud} 
                               destinatario={{email: event.email, nombre: event.title}}/>
                   </div>
                 ) : (
                   <span>
-                  {event.status === "denegado" ? "Denegado" : "Aceptado"}
+                  Resuelto
                   </span>                  
                 )}
                   </TableCell>

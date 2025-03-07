@@ -20,6 +20,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
+import duration from 'dayjs/plugin/duration';
+import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 
 import MenuItem from '@mui/material/MenuItem';
@@ -28,6 +30,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 
 import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
+dayjs.extend(duration);
 
 
 const HacerSolicitud = ({
@@ -35,8 +38,7 @@ const HacerSolicitud = ({
     setSolicitudAbierto
 }) => {
     const { obtenerSolicitudes, accionEnProgreso } = useContext(SolicitudesContext)
-    const [exito, setExito] = useState(false) // ALmacena si se realizó con éxito la solicitud
-
+    const duracionMaxima = dayjs.duration(2.5, 'hours')
     // ESTADOS PARA MANEJAR LA INFO //
     const [nombre, setNombre] = useState('')
     const [apellido, setApellido] = useState('')
@@ -256,6 +258,32 @@ const HacerSolicitud = ({
                 msj: "",
             })   
         }
+
+    if (horaFin && horaInicio) {
+        // Validar que la duración no sea mayor a 2 horas y 30 minutos
+        const duracion = dayjs.duration(horaFin.diff(horaInicio));
+
+        if (duracion.asMilliseconds() > duracionMaxima.asMilliseconds()) {
+            valido = false;
+            setHoraIniError({
+                error: true,
+                msj: "La duración no puede ser mayor a 2h y 30m",
+            });
+            setHoraFinError({
+                error: true,
+                msj: "La duración no puede ser mayor a 2h 30m",
+            });
+        } else {
+            setHoraIniError({
+                error: false,
+                msj: "",
+            });
+            setHoraFinError({
+                error: false,
+                msj: "",
+            });
+        }
+    }
 
         if (!descripcion) {
             valido = false;
@@ -516,7 +544,8 @@ const HacerSolicitud = ({
                     Descripción
                 </Divider>
                 <p style={{marginRight: "10px",marginLeft:"10px", color:"rgb(14, 28, 27)"}}> 
-                    Por favor, especifique qué personas ingresarán al estudio y el equipamiento que se utilizará.
+                    Por favor, especifique qué personas ingresarán al estudio, el equipamiento e infraestructura necesaria, 
+                    la actividad a realizar y los resultados esperados.
                 </p>
                 <ListItem>
                     <FormControl error={descError.error} fullWidth>

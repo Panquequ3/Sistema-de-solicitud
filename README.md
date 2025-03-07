@@ -35,6 +35,11 @@ npm install @mui/x-date-pickers
 npm install dayjs
 ```
 
+Para generar códigos aleatorios para confirmar solicitudes.
+```bash
+npm install shortid
+```
+
 * [PassLib] (https://passlib.readthedocs.io/en/stable/install.html)
 Para la seguridad de contraseñas (se utiliza bcrypt que es la que recomienda FastAPI)
 ```bash

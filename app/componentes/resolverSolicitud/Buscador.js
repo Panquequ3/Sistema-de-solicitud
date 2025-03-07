@@ -36,6 +36,7 @@ const Buscador = ({setEventos}) => {
           endTime: solicitud.hora_fin.slice(0,5), // o sea, solo el HH:MM
           id_solicitud: solicitud.id_solicitud,
           status: solicitud.estado,
+          sala: solicitud.sala
         }})
       .sort((a, b) => {
 

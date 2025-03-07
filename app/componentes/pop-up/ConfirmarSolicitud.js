@@ -19,15 +19,19 @@ const ConfirmarSolicitud = ({
 
 }) => {
   const { obtenerSolicitudes } = useContext(SolicitudesContext);
-  const [aceptar, setAceptar] = useState(false);
+  const [resolver, setResolver] = useState(false);
   const [intento, setIntento] = useState('');
   const [correcto, setCorrecto] = useState(false);
+  const [estado, setEstado] = useState('');
   const [codigoError, setCodigoError] = useState({
     error: false,
     msj: "",
 })
 
 const crearEstado = async () => {
+    console.log(estado);
+
+    if (estado === '') return null;
     try {
         const response = await fetch(`http://localhost:8000/estado/`, {
             method: "POST",
@@ -35,7 +39,7 @@ const crearEstado = async () => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                estado: "aceptado"
+                estado: estado
             }),
         });
 
@@ -86,7 +90,9 @@ const actualizaSolicitud = async () => {
 
 }
 
-  const verificar = () => {
+  const verificar = (eleccion) => {
+    setEstado(eleccion);
+
     if (!intento) {
         setCorrecto(false);
         setCodigoError({
@@ -101,7 +107,7 @@ const actualizaSolicitud = async () => {
         })
     } else {
         setCorrecto(true);
-        setAceptar(false);
+        setResolver(false);
         actualizaSolicitud();
         setCodigoError({
             error: false,
@@ -126,7 +132,7 @@ const actualizaSolicitud = async () => {
         slotProps={{ backdrop: { style: { backgroundColor: "#17264A80" } } }}
         >
             <DialogTitle id="alert-dialog-title">
-            {"Aceptar solicitud"}
+            {"Aceptar o denegar solicitud"}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
@@ -134,21 +140,21 @@ const actualizaSolicitud = async () => {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <button className='accept-button' onClick={() => setAceptar(true)}>Aceptar</button>
+                <button className='accept-button' onClick={() => setResolver(true)}>Resolver</button>
                 <button className='deny-button' onClick={() => setResolverAbierto(false)}>Cancelar</button>
             </DialogActions>
         </Dialog>
       
       
         <Dialog
-        open={aceptar}
-        onClose={() => setAceptar(false)}
+        open={resolver}
+        onClose={() => setResolver(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         slotProps={{ backdrop: { style: { backgroundColor: "#17264A80" } } }}
         >
             <DialogTitle id="alert-dialog-title">
-            {"Aceptar solicitud"}
+            {"Aceptar o denegar solicitud"}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
@@ -168,8 +174,9 @@ const actualizaSolicitud = async () => {
                 </div>
             </DialogContent>
             <DialogActions>
-                <button className='accept-button' onClick={verificar}>Aceptar</button>
-                <button className='deny-button' onClick={() => setAceptar(false)}>Cancelar</button>
+                <button className='accept-button' onClick={() => verificar("aceptado")}>Aceptar</button>
+                <button className='deny-button' onClick={() => verificar("denegado")}>Denegar</button>
+                <button className='deny-button' onClick={() => setResolver(false)}>Cancelar</button>
             </DialogActions>
         </Dialog>
       

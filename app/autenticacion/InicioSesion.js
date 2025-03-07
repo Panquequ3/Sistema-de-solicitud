@@ -15,11 +15,13 @@ import {
     Avatar
   } from '@mui/material';
 import { useRouter } from "next/navigation"; 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import '../globals.css';
+import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
 const InicioSesion = () => {
     const router = useRouter();
+    const { admin, setAdmin } = useContext(SolicitudesContext);
     const [email, setEmail] = useState('')
     const [emailError, setEmailError] = useState({
         error: false,
@@ -99,9 +101,9 @@ const InicioSesion = () => {
             }
 
             const data = await response.json();
+            setAdmin(true);
             router.push("/admin"); 
             console.log("Ingreso exitoso");
-            alert("Ingreso exitoso!!!!");
         } catch (error) {
             console.error("Error al iniciar sesión:", error);
         }

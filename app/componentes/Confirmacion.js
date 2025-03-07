@@ -34,8 +34,9 @@ const Confirmacion = ({ contenido, abierto, setAbierto}) => {
                 {"¡Listo!"}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        {contenido}
+                    <DialogContentText id="alert-dialog-description"
+                    sx={{ maxWidth: '450px'}}>
+                        {contenido}, esperando confirmación del estudiante.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

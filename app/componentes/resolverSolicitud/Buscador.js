@@ -38,23 +38,30 @@ const Buscador = ({setEventos}) => {
           status: solicitud.estado,
         }})
       .sort((a, b) => {
-      // Si el segundo elemento (b) ya fue resuelto, entonces el primero (a) debe ir antes
-      if (b.status !== "pendiente" && a.status === "pendiente" ) return -1; 
 
-      // Si el segundo elemento (b) no ha sido resuelto, entonces el primero (a) debe ir después
-      if (b.status === "pendiente" && a.status !== "pendiente" ) return 1; 
+      // Si ambos son "pendiente" o ambos son "en revision", ordenamos por id de menor a mayor
+        if ((a.status === "pendiente" && b.status === "pendiente") || 
+            (a.status === "en revision" && b.status === "en revision")) {
+          return a.id_solicitud - b.id_solicitud;
+        }
 
-      // Si ya fueron resueltos, ordenamos por fecha
-      if (b.status !== "pendiente" && a.status !== "pendiente") {
-        const dateA = new Date(a.start);
-        const dateB = new Date(b.start);
-        return dateB - dateA;
-      }
+        // Si el segundo elemento (b) ya fue resuelto, y el primero aun no, entonces el primero (a) debe ir antes
+        if (b.status !== "pendiente" && b.status !== "en revision" && a.status === "pendiente" || a.status === "en revision") return -1; 
+        if (b.status === "pendiente" || b.status === "en revision" && a.status !== "pendiente" && a.status !== "en revision") return 1; 
 
-      // Si ninguno ha sido resuelto ordenamos por id, de menor (más antiguo) a mayor (más reciente)
-      return a.id_solicitud - b.id_solicitud;
+      
+        if (b.status === "pendiente" && a.status === "en revision" ) return -1; 
+        if (b.status === "en revision" && a.status === "pendiente" ) return 1; 
+
+        // Si ya fueron resueltos, ordenamos por fecha
+        if (b.status !== "pendiente" && b.status !== "en revision" && a.status !== "pendiente" && a.status !== "en revision") {
+          const dateA = new Date(a.start);
+          const dateB = new Date(b.start);
+          return dateB - dateA;
+        }
+
       });
-      return listaOrdenada
+      return listaOrdenada;
   }
 
   const solicitudPorNombre = async () => {

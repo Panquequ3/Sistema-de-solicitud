@@ -26,4 +26,5 @@ while not validate_password(password):
     password = input("Ingrese la clave a encriptar: ")
 
 hashed_password = get_password_hash(password)
+print("\n")
 print(f"listo: {hashed_password}")

@@ -18,6 +18,7 @@ import { useEffect, useState, useContext } from 'react';
 
 import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
+
 // Componente que lista todas las solicitudes para ser visualizadas y resueltas
 // por el administrador
 
@@ -26,7 +27,7 @@ const ListarSolicitud = () => {
   const [descripcion, setDescripcion] = useState(null);
   const [eventos, setEventos] = useState([]); // Ejemplos temporales
   const [filtro, setFiltro] = useState('');
-  const { solicitudes, obtenerSolicitudes, accionEnProgreso } = useContext(SolicitudesContext);
+  const { solicitudes, obtenerSolicitudes, accionEnProgreso, admin } = useContext(SolicitudesContext);
 
   const filtra = async () => { 
     const evento = solicitudes
@@ -45,20 +46,14 @@ const ListarSolicitud = () => {
         };
       }).sort((a, b) => {
         // Si el segundo elemento (b) ya fue resuelto, entonces el primero (a) debe ir antes
-        if (b.status !== "pendiente" && b.status !== "en revision" && a.status === "pendiente" ) return -1; 
+        if (b.status !== "pendiente" && b.status !== "en revision" && a.status === "pendiente" || a.status === "en revision") return -1; 
 
         // Si el segundo elemento (b) no ha sido resuelto, entonces el primero (a) debe ir después
-        if (b.status === "pendiente" && b.status !== "en revision" && a.status !== "pendiente" ) return 1; 
+        if (b.status === "pendiente" || b.status === "en revision" && a.status !== "pendiente" && a.status !== "en revision") return 1; 
 
 
-        if (b.status !== "en revision" && a.status === "en revision" ) return -1; 
-
-        if (b.status === "en revision" && a.status !== "en revision" ) return 1; 
-
-
-        if (b.status !== "pendiente" && a.status === "en revision" ) return -1; 
-
-        if (b.status === "pendiente" && a.status !== "en revision" ) return 1; 
+        if (b.status === "pendiente" && a.status === "en revision" ) return -1; 
+        if (b.status === "en revision" && a.status === "pendiente" ) return 1; 
 
         // Si ya fueron resueltos, ordenamos por fecha
         if (b.status !== "pendiente" && b.status !== "en revision" && a.status !== "pendiente" && a.status !== "en revision") {
@@ -107,6 +102,11 @@ const ListarSolicitud = () => {
     
   }
 
+
+  if (!admin) {
+    return null;
+  }
+  
   return (
     <div>
       <div className='filter-div'>

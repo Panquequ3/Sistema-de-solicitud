@@ -89,15 +89,13 @@ const InicioSesion = () => {
                 }),
             });
 
-            if (!response.ok) {
-                alert("ERROR!");
-                
+            if (!response.ok) {           
                   setInicioError({
                       error: true,
                       msj: "Los datos ingresados son incorrectos.",
                   })
 
-                throw new Error("Fallo al iniciar sesion");   
+                return;   
             }
 
             const data = await response.json();

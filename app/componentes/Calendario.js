@@ -7,7 +7,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import ModalSolicitud from './pop-up/ModalSolicitud';
 import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
-// Componente que renderiza el calendario con las reservas del estudio
+// Componente que renderiza el calendario con las reservas del estudio, de aquí se 
+// despliega tambien la posibilidad de ver las solicitudes con más detalle y realizar una
 
 const Calendario = () => {
   const calendarRef = useRef(null); // almacenará el calendario
@@ -17,6 +18,7 @@ const Calendario = () => {
   const [eventos, setEventos] = useState([]);
   const { solicitudes, obtenerSolicitudes, accionEnProgreso } = useContext(SolicitudesContext);
 
+  /* Función para mostrar solo aquellas que no están denegadas */
   const filtra = async () => { 
     const evento = solicitudes
       .filter(solicitud => solicitud.estado !== "denegado")

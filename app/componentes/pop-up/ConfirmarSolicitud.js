@@ -1,5 +1,8 @@
 "use client";
 
+// Componente que despliega un Dialog para resolver la solicitud cuando
+// está en estado "en revisión", en espera de que el estudiante acepte la condición ofrecida
+
 import { useState, useContext } from 'react';
 
 import Dialog from '@mui/material/Dialog';
@@ -28,6 +31,7 @@ const ConfirmarSolicitud = ({
     msj: "",
 })
 
+/* funcion para crear el estado de la solicitud */
 const crearEstado = async () => {
     console.log(estado);
 
@@ -55,6 +59,7 @@ const crearEstado = async () => {
     }
 };
 
+/* actualiza el estado de la solicitud */
 const actualizaSolicitud = async () => {
 
     const id_estado = await crearEstado();
@@ -90,7 +95,8 @@ const actualizaSolicitud = async () => {
 
 }
 
-  const verificar = (eleccion) => {
+/* verifica que el codigo ingresado para resolver la función sea correcto */
+const verificar = (eleccion) => {
     setEstado(eleccion);
 
     if (!intento) {
@@ -116,7 +122,7 @@ const actualizaSolicitud = async () => {
     }
   }
 
-  const actualiza = () => {
+const actualiza = () => {
     setCorrecto(false);
     setResolverAbierto(false);
     obtenerSolicitudes();

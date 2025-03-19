@@ -30,6 +30,7 @@ const ModalSolicitud = ({
     accionEnProgreso.current = false;
   };
 
+  /* Función que obtiene la condición de las solicitudes en estado de "en revisión" */
   const obtenerCondicion = async (id_solicitud) => {
     try {
       const response = await fetch(`http://localhost:8000/condicion/${id_solicitud}`);
@@ -46,6 +47,8 @@ const ModalSolicitud = ({
     }
   };
 
+  /* Función que controla que al hacer click en una solicitud en estado de "en revisión" se abra un dialogue 
+  para resolver la solicitud por parte del estudiante (si acepta o no la condición) */
   const handleClick = (id_solicitud) => {
     console.log("resolviendo");
     setResolverAbierto(true);
@@ -54,17 +57,18 @@ const ModalSolicitud = ({
     obtenerCondicion(id_solicitud);
   };
 
-  // Función que maneja que al hacer click fuera del modal, este se cierre
+  /* Función que maneja que al hacer click fuera del modal, este se cierre */
   const handleOverlayClick = (ev) => {
     if (ev.target === ev.currentTarget) {
       handleClose();
     }
   };
 
+  /* Cierra el modal que muestra las solicitudes y abre el que permitirá hacer una solicitud*/
   const handleApplication = () => {
     setModalAbierto(false);
     setSolicitudAbierto(true);
-    accionEnProgreso.current = true;
+    accionEnProgreso.current = true; // Para que la aplicación no se reinicie al renderizarse nuevamente las solicitudes, si está realizando una acción
   };
 
 

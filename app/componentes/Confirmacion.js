@@ -9,7 +9,7 @@ import { useEffect, useContext } from 'react';
 
 import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
-// Componente: Dialogo que indica que se realizó con exito una acción
+// Componente que despliega un dialogo que indica que se realizó con exito una acción
 
 const Confirmacion = ({ contenido, abierto, setAbierto}) => { 
     const { obtenerSolicitudes, accionEnProgreso } = useContext(SolicitudesContext);

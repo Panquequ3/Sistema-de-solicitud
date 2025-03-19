@@ -19,6 +19,9 @@ import { useState, useContext } from 'react';
 import '../globals.css';
 import { SolicitudesContext } from "@/app/context/SolicitudesContext";
 
+// Componente que renderiza los espacios para ingresar las credenciales para iniciar sesión
+
+
 const InicioSesion = () => {
     const router = useRouter();
     const { admin, setAdmin } = useContext(SolicitudesContext);
@@ -27,7 +30,6 @@ const InicioSesion = () => {
         error: false,
         msj: "",
     })
-
     const [contrasena, setContrasena] = useState('')
     const [contrasenaError, setContrasenaError] = useState({
         error: false,
@@ -38,6 +40,7 @@ const InicioSesion = () => {
       msj: "",
   })
 
+    // Función para validar las credenciales ingresadas en los respectivos campos
     const validarCampos = () => {
         let valido = true;
 
@@ -70,8 +73,11 @@ const InicioSesion = () => {
       return valido;
     };
 
+    // Función para comprobar que las credenciales ingresadas son correctas, de serlo se permite ingresar
+    // a la interfaz de administrador
     const sendRequest = async () => {
 
+        // Si algun campo no es valido, no se permite el ingreso
         if (!validarCampos()) {
             alert("hubo un error");
             return;
@@ -100,7 +106,7 @@ const InicioSesion = () => {
 
             const data = await response.json();
             setAdmin(true);
-            router.push("/admin"); 
+            router.push("/admin"); // Se redirige a la interfaz de administrador
             console.log("Ingreso exitoso");
         } catch (error) {
             console.error("Error al iniciar sesión:", error);

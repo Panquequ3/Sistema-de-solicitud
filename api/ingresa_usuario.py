@@ -31,16 +31,17 @@ print("¡Bienvenido! Para registrar el usuario ingrese los siguientes datos: ")
 nombre = input("Ingrese su nombre: ").upper()
 apellido = input("Ingrese su apellido: ").upper()
 email = input("Ingrese su correo electrónico: ").lower()
+
 # Generar el hash de la contraseña
-print("Cree su contraseña que siga las siguientes condiciones: ")
+print("\nCree una contraseña que siga las siguientes condiciones: ")
 print(" * Debe tener entre 8 y 16 caracteres.")
 print(" * Debe tener al menos un dígito.")
 print(" * Debe tener al menos una minúscula y una mayúscula.")
 
-password = input("ingrese la clave a encriptar: ")
+password = input("ingrese la contraseña: ")
 while not validate_password(password):
     print("La contraseña no cumple con los criterios. Inténtelo de nuevo.")
-    password = input("Ingrese la clave a encriptar: ")
+    password = input("Ingrese la contraseña: ")
 
 print("\n")
 hashed_password = get_password_hash(password)

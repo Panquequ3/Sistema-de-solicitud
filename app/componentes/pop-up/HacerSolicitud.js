@@ -1,6 +1,6 @@
 "use client";
 
-// Componente modal (pop up) que despliega la interfaz de solicitar
+// Componente que despliega modal (pop up) para de solicitar
 // una reserva del estudio
 
 import { useState, useContext } from 'react';
@@ -38,7 +38,7 @@ const HacerSolicitud = ({
     setSolicitudAbierto
 }) => {
     const { obtenerSolicitudes, accionEnProgreso } = useContext(SolicitudesContext)
-    const duracionMaxima = dayjs.duration(2.5, 'hours')
+    const duracionMaxima = dayjs.duration(2.5, 'hours') // Para comparar la duración máxima que permitirá hacer la solicitud
     // ESTADOS PARA MANEJAR LA INFO //
     const [nombre, setNombre] = useState('')
     const [apellido, setApellido] = useState('')
@@ -83,7 +83,7 @@ const HacerSolicitud = ({
     })
     
     
-    /* funcion para crear el estado*/
+    /* funcion para crear el estado de la solicitud */
     const crearEstado = async () => {
         try {
             const response = await fetch(`http://localhost:8000/estado/`, {
@@ -129,7 +129,7 @@ const HacerSolicitud = ({
         }
     };
 
-    /* funcion para crear al estudiante */
+    /* Función para crear al estudiante en la BD */
     const crearEstudiante = async () => {
         try {
             const response = await fetch(`http://localhost:8000/estudiante/`, {
@@ -156,6 +156,7 @@ const HacerSolicitud = ({
         }
     };
 
+    /* Función que valida que lo ingresado en los campos sean correctos */
     const validarCampos = () => {
         let valido = true;
         // Expresión regular para validar el email, deberia de aceptar solo emails que contengan
@@ -301,8 +302,10 @@ const HacerSolicitud = ({
         return valido;
     };
 
+    /* Función que envía la solicitud a la BD*/
     const sendRequest = async () => {
 
+        // Si los campos no son validos, entonces no enviamos la solicitud
         if (!validarCampos()) {
             return;
         }
@@ -320,6 +323,7 @@ const HacerSolicitud = ({
                 throw new Error("No se pudo crear y obtener el ID del estudiante");
             }
 
+            // Se crea un estado para la solicitud
             const idEstado = await crearEstado();
             if (!idEstado) {
                 throw new Error("No se pudo crear y obtener el ID del estado");
@@ -348,7 +352,7 @@ const HacerSolicitud = ({
             const data = await response.json();
 
             alert("Se realizó la solicitud con éxito, será notificado mediante correo electrónico");
-            await obtenerSolicitudes(); // Actualizamos
+            await obtenerSolicitudes(); // Actualizamos la lista de solicitudes
            
 
             console.log("Solicitud creada:", data);
@@ -358,17 +362,17 @@ const HacerSolicitud = ({
         }
 
         handleClose();
-        
+   
     };
 
-    // Función que maneja que el modal se cierre
+    /* Función que maneja que el modal se cierre */
     const handleClose = () => {
         setSolicitudAbierto(false);
         accionEnProgreso.current = false;
     };
 
 
-    // Función que maneja que al hacer click fuera del modal, este se cierre
+    /* Función que maneja que al hacer click fuera del modal, este se cierre */
     const handleOverlayClick = (ev) => {
         if (ev.target === ev.currentTarget) {
         handleClose();
@@ -386,7 +390,7 @@ const HacerSolicitud = ({
                 </h1>
                 <IconButton
                     aria-label="close"
-                    onClick={handleClose} //(e) => setSolicitudAbierto(false)
+                    onClick={handleClose}
                     sx={{
                     color: (theme) => theme.palette.grey[500],
                     }}
